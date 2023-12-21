@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.infrastructure.response;
+package br.com.paramazon.demo.infrastructure.response.usuario;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModelProperty;

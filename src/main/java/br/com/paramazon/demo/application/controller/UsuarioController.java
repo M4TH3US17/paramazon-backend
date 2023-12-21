@@ -1,8 +1,8 @@
 package br.com.paramazon.demo.application.controller;
 
-import br.com.paramazon.demo.application.dto.UsuarioLogadoDTO;
+import br.com.paramazon.demo.application.dto.usuario.UsuarioLogadoDTO;
 import br.com.paramazon.demo.application.services.UsuarioService;
-import br.com.paramazon.demo.infrastructure.response.UsuarioResponse;
+import br.com.paramazon.demo.infrastructure.response.usuario.UsuarioResponse;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;

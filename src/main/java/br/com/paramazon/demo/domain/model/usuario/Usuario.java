@@ -1,15 +1,12 @@
-package br.com.paramazon.demo.domain.model;
+package br.com.paramazon.demo.domain.model.usuario;
 
-import br.com.paramazon.demo.domain.enums.UsuarioRole;
+import br.com.paramazon.demo.domain.model.usuario.role.Role;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.io.Serializable;
-import java.time.LocalDate;
+import java.time.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -38,11 +35,15 @@ public class Usuario implements Serializable {
     private boolean enabled = false;
 
     @Column
-    private LocalDate RegistrationDate;
+    private String urlImage;
 
     @Column
-    @Enumerated(EnumType.STRING)
-    @ElementCollection(fetch = FetchType.EAGER)
-    private Set<UsuarioRole> roles = new HashSet<>();
+    private LocalDate RegistrationDate;
+
+    @ManyToMany(fetch = FetchType.LAZY)
+    @JoinTable(name = "usuario_roles",
+            joinColumns = @JoinColumn(name = "role_id"),
+            inverseJoinColumns = @JoinColumn(name = "usuario_id"))
+    private Set<Role> roles = new HashSet<>();
 
 }

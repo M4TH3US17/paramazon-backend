@@ -1,8 +1,8 @@
 package br.com.paramazon.demo.application.services;
 
-import br.com.paramazon.demo.domain.model.Usuario;
+import br.com.paramazon.demo.domain.model.usuario.Usuario;
 import br.com.paramazon.demo.domain.repository.UsuarioRepository;
-import br.com.paramazon.demo.infrastructure.response.UsuarioResponse;
+import br.com.paramazon.demo.infrastructure.response.usuario.UsuarioResponse;
 import br.com.paramazon.demo.utils.usuarios.UsuarioUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

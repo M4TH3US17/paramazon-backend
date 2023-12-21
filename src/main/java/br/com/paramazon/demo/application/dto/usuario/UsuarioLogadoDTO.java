@@ -1,7 +1,6 @@
-package br.com.paramazon.demo.application.dto;
+package br.com.paramazon.demo.application.dto.usuario;
 
 import br.com.paramazon.demo.application.enums.RoleEnumDTO;
-import br.com.paramazon.demo.domain.enums.UsuarioRole;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 import io.swagger.annotations.ApiModelProperty;
@@ -25,6 +24,9 @@ public class UsuarioLogadoDTO {
 
     @ApiModelProperty(value = "E-mail cadastrado do Usuario Logado", example = "teste@teste.com.br", required = true)
     private String email;
+
+    @ApiModelProperty(value = "Imagem cadastrada do Usuario Logado", example = "https://link-imagem.html")
+    private String urlImage;
 
    /* @ApiModelProperty(value = "Role para definir nivel de acesso do Usuario.",
             example = "USER", name = "Enumeration Role.", notes = "Enumeration Role.", reference = "Enumeration Role.")

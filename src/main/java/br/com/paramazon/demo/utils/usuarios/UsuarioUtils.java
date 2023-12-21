@@ -1,9 +1,8 @@
 package br.com.paramazon.demo.utils.usuarios;
 
-import br.com.paramazon.demo.application.dto.UsuarioLogadoDTO;
+import br.com.paramazon.demo.application.dto.usuario.UsuarioLogadoDTO;
 import br.com.paramazon.demo.application.enums.RoleEnumDTO;
-import br.com.paramazon.demo.domain.enums.UsuarioRole;
-import br.com.paramazon.demo.domain.model.Usuario;
+import br.com.paramazon.demo.domain.model.usuario.Usuario;
 import lombok.*;
 
 import java.util.ArrayList;
@@ -24,20 +23,21 @@ public class UsuarioUtils {
         return UsuarioLogadoDTO.builder()
                 .username(usuario.getUsername())
                 .email(usuario.getEmail())
-                .roles(retornaRoleDTO(usuario.getRoles()))
+                .urlImage(usuario.getUrlImage())
+                .roles(null)
                 .build();
     }
 
-    private static Set<RoleEnumDTO> retornaRoleDTO(Set<UsuarioRole> usuarioRoles) {
+ /*   private static Set<RoleEnumDTO> retornaRoleDTO(Set<Role> usuarioRoles) {
         Set<RoleEnumDTO> dtoSet = new HashSet<>();
 
         usuarioRoles.forEach(usuarioRole -> {
-            if (usuarioRole.equals(UsuarioRole.ROLE_ADMIN))
+            if (usuarioRole.equals(Role.ROLE_ADMIN))
                 dtoSet.add(RoleEnumDTO.Administrador);
             else
                 dtoSet.add(RoleEnumDTO.Usuario);
         });
 
         return dtoSet;
-    }
+    }*/
 }
