@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.domain.model.usuario.role;
+package br.com.paramazon.demo.domain.model.user.role;
 
 public enum UserRole {
 
