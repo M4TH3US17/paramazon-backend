@@ -23,10 +23,5 @@ public class Role implements Serializable {
 
     @Column(name = "name", nullable = false)
     private String name;
-
-    @PrePersist
-    private void prePersist() {
-        if (this.name == null)
-            this.name = UserRole.ROLE_USER.toString();
-    }
+    
 }

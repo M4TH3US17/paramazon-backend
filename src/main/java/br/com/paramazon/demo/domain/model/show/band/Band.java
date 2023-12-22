@@ -58,4 +58,14 @@ public class Band implements Serializable {
         this.createDate = LocalDate.now();
     }
 
+    public void addBandSinger(BandSinger bandSinger) {
+        bandSingers.add(bandSinger);
+        bandSinger.setBand(this);
+    }
+
+    public void removeBandSinger(BandSinger bandSinger) {
+        bandSingers.remove(bandSinger);
+        bandSinger.setBand(null);
+    }
+
 }
