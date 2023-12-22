@@ -42,4 +42,5 @@ public class Presentation implements Serializable {
 
     @Column
     private String description;
+
 }

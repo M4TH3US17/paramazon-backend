@@ -38,4 +38,5 @@ public class Show implements Serializable {
             joinColumns = @JoinColumn(name = "show_id"),
             inverseJoinColumns = @JoinColumn(name = "presentation_id"))
     private List<Presentation> presentations;
+
 }

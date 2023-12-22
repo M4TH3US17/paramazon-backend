@@ -12,4 +12,6 @@ public class UserService {
 
     private final UserRepository repository;
 
+    public void getAllUsers() {
+    }
 }
