@@ -6,7 +6,7 @@ import io.swagger.annotations.*;
 import lombok.*;
 
 import java.io.Serializable;
-import java.util.Date;
+import java.time.LocalDate;
 
 @Data
 @Builder
@@ -18,6 +18,5 @@ public class MediaDTO implements Serializable {
 
     private Long idMedia;
     private String s3Key;
-    private MediaType type;
-    private Date createDate;
+    private LocalDate createDate;
 }

@@ -5,7 +5,6 @@ import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.user.role.Role;
-import br.com.paramazon.demo.domain.model.user.role.UserRole;
 import br.com.paramazon.demo.domain.model.user.validations.ValidationEmail;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
@@ -18,7 +17,7 @@ import java.util.*;
 @Getter @Setter
 @ToString @NoArgsConstructor
 @Builder @Entity
-@Table(name = "user") @AllArgsConstructor
+@Table(name = "\"user\"") @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 public class User implements Serializable {
 
