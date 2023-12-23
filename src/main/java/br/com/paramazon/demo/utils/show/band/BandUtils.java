@@ -18,6 +18,6 @@ public class BandUtils {
     }
 
     public static BandDTO convertToDTO(Band data) {
-        return BandDTO.builder().build();
+        return null;
     }
 }

@@ -11,10 +11,10 @@ public class Utils {
 
 
     public static ValidationEmailDTO convertValidationEmailToDTO(ValidationEmail data) {
-        return ValidationEmailDTO.builder()
-                .idEmail(data.getIdValidationEmail())
-                .email(data.getEmail())
-                .isConfirmed(data.getIsConfirmed())
-                .build();
+        return new ValidationEmailDTO(
+                data.getIdValidationEmail(),
+                data.getEmail(),
+                data.getIsConfirmed()
+        );
     }
 }

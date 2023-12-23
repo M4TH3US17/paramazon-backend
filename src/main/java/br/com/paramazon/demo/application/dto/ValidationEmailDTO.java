@@ -6,16 +6,12 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(discriminator = "Email Validation", value = "Email Validation", description = "Situacao do email no sistema.")
-public class ValidationEmailDTO implements Serializable {
-
-    private Long idEmail;
-    private String email;
-    private Boolean isConfirmed;
+public record ValidationEmailDTO(
+        Long idEmail,
+        String email,
+        Boolean isConfirmed
+) implements Serializable {
 
 }

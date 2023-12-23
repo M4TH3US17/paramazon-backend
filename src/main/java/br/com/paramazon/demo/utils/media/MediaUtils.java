@@ -17,10 +17,9 @@ public class MediaUtils {
     }
 
     public static MediaDTO convertToDTO(Media data) {
-        return MediaDTO.builder()
-                .idMedia(data.getIdMedia())
-                .createDate(data.getCreateDate())
-                .s3Key(data.getS3Key())
-                .build();
+        return new MediaDTO(
+                data.getIdMedia(),
+                data.getS3Key()
+        );
     }
 }

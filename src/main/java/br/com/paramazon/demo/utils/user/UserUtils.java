@@ -20,11 +20,11 @@ public class UserUtils {
     }
 
     public static UserProfileDTO convertToDTO(User data) {
-        return UserProfileDTO.builder()
-                .username(data.getUsername())
-                .email(Utils.convertValidationEmailToDTO(data.getEmail()))
-                .photograph(MediaUtils.convertToDTO(data.getPhotograph()))
-                .preferences(BandUtils.buildBaseBandList(data.getPreferences()))
-                .build();
+        return new UserProfileDTO(
+                data.getUsername(),
+                MediaUtils.convertToDTO(data.getPhotograph()),
+                Utils.convertValidationEmailToDTO(data.getEmail()),
+                BandUtils.buildBaseBandList(data.getPreferences())
+        );
     }
 }

@@ -32,6 +32,6 @@ public class UserController {
     public ResponseEntity<?> obterTodosUsuarios() {
         log.info("UserController :: Iniciando o processo de obtenção de todos os usuarios cadastrados no sistema!");
         var response = service.getAllUsers();
-        return ResponseEntity.status(response.getCode()).body(response);
+        return ResponseEntity.status(response.code()).body(response);
     }
 }

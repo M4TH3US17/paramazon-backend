@@ -10,6 +10,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Slf4j
@@ -21,20 +22,20 @@ public class UserService {
 
     public UserResponse getAllUsers() {
         log.info("UserService :: Obtendo todos os usuarios cadastrados no sistema...");
-        List<User> users = repository.findAllByStatus(Status.ACTIVE);
+        List<User> activeUsers = repository.findAllByStatus(Status.ACTIVE);
 
-        if(users.isEmpty()) {
+        if (activeUsers.isEmpty()) {
             log.info("UserService :: Nenhum usuario encontrado!");
-            return UserResponse.builder()
-                    .code(HttpStatus.NOT_FOUND.value())
-                    .message("Não foi encontrado nenhum usuario na base")
-                    .build();
+            return new UserResponse(
+                    HttpStatus.NOT_FOUND.value(),
+                    "Não foi encontrado nenhum usuario na base",
+                    new ArrayList<>()
+            );
         }
 
-        return UserResponse.builder()
-                .code(HttpStatus.OK.value())
-                .message("Segue a lista com todos os Usuarios encontrados")
-                .data(UserUtils.buildBaseUserList(users))
-                .build();
+        return new UserResponse(
+                HttpStatus.OK.value(),
+                "Segue a lista com todos os Usuarios encontrados",
+                UserUtils.buildBaseUserList(activeUsers));
     }
 }

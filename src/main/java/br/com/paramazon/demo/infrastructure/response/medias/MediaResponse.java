@@ -6,20 +6,15 @@ import lombok.*;
 
 import java.io.Serializable;
 
-@Data
-@Builder
-@AllArgsConstructor
-@NoArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class MediaResponse implements Serializable {
+public record MediaResponse(
+        @ApiModelProperty(value = "Código HttpStatus", example = "200, 201, 400...", required = true)
+        int code,
 
-    @ApiModelProperty(value = "Código HttpStatus", example = "200, 201, 400...", required = true)
-    private int code;
+        @ApiModelProperty(value = "Mensagem de retorno do sistema", example = "Arquivo Cadastrado com sucesso.", required = true)
+        String message,
 
-    @ApiModelProperty(value = "Mensagem de retorno do sistema", example = "Arquivo Cadastrado com sucesso.", required = true)
-    private String message;
-
-    @ApiModelProperty(value = "Objeto de retorno para o front-end", example = "Pode ser diversas entidades, conforme o fluxo atual.")
-    private Object data;
-
+        @ApiModelProperty(value = "Objeto de retorno para o front-end", example = "Pode ser diversas entidades, conforme o fluxo atual.")
+        Object data
+) implements Serializable {
 }
