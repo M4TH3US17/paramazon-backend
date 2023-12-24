@@ -73,7 +73,7 @@ public class UserUtils {
     }
 
     /**
-     * Converte a coleção de membros de uma banda para um conjunto de DTOs UserBandSingerPreferenceDTO.
+     * Converte a coleção de membros de uma banda (preferida do usuario) para um conjunto de DTOs UserBandSingerPreferenceDTO.
      *
      * @param bandMembers A coleção de entidades de usuário representando os membros da banda.
      * @return Um conjunto de DTOs UserBandSingerPreferenceDTO.
@@ -81,7 +81,6 @@ public class UserUtils {
     private static Set<UserBandSingerPreferenceDTO> convertListOfBandMembersToDTO(Set<BandSinger> bandMembers) {
         return bandMembers.stream()
                 .map(member -> new UserBandSingerPreferenceDTO(
-                        member.getUser().getIdUser(),
                         member.getUser().getUsername(),
                         MediaUtils.convertToDTO(member.getUser().getPhotograph())))
                 .collect(Collectors.toSet());

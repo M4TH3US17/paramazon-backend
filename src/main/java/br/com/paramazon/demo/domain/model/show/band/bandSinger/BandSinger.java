@@ -20,13 +20,13 @@ public class BandSinger implements Serializable {
     @EmbeddedId
     private BandSingerId id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("bandId")
     @JoinColumn(name = "band_id")
     @JsonBackReference
     private Band band;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     @JsonBackReference

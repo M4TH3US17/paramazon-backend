@@ -9,7 +9,6 @@ import io.swagger.annotations.ApiModel;
         value = "User Singer Band Preference",
         description = "Membros pertecentes as bandas preferidas do usuario.")
 public record UserBandSingerPreferenceDTO(
-        Long idMember,
-        String name,
+        String member,
         MediaDTO photograph) {
 }
