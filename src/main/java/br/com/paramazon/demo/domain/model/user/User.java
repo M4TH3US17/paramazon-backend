@@ -8,6 +8,7 @@ import br.com.paramazon.demo.domain.model.user.role.Role;
 import br.com.paramazon.demo.domain.model.user.validations.ValidationEmail;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -58,6 +59,7 @@ public class User implements Serializable {
     @JoinTable(name = "user_preference",
             joinColumns = @JoinColumn(name = "user_id"),
             inverseJoinColumns = @JoinColumn(name = "band_id"))
+    @JsonManagedReference
     private Set<Band> preferences;
 
     @PrePersist

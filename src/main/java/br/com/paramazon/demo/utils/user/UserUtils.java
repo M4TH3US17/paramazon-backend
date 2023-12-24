@@ -1,8 +1,10 @@
 package br.com.paramazon.demo.utils.user;
 
-import br.com.paramazon.demo.application.dto.user.profile.UserPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.preferences.UserBandSingerPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.preferences.UserPreferenceDTO;
 import br.com.paramazon.demo.application.dto.user.profile.UserProfileDTO;
 import br.com.paramazon.demo.domain.model.show.band.Band;
+import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandSinger;
 import br.com.paramazon.demo.domain.model.user.User;
 import br.com.paramazon.demo.utils.Utils;
 import br.com.paramazon.demo.utils.media.MediaUtils;
@@ -66,7 +68,24 @@ public class UserUtils {
                 data.getIdBand(),
                 data.getName(),
                 MediaUtils.convertToDTO(data.getPhotograph()),
-                data.getDescription()
-        );
+                convertListOfBandMembersToDTO(data.getBandSingers()),
+                data.getDescription());
     }
+
+    /**
+     * Converte a coleção de membros de uma banda para um conjunto de DTOs UserBandSingerPreferenceDTO.
+     *
+     * @param bandMembers A coleção de entidades de usuário representando os membros da banda.
+     * @return Um conjunto de DTOs UserBandSingerPreferenceDTO.
+     */
+    private static Set<UserBandSingerPreferenceDTO> convertListOfBandMembersToDTO(Set<BandSinger> bandMembers) {
+        return bandMembers.stream()
+                .map(member -> new UserBandSingerPreferenceDTO(
+                        member.getUser().getIdUser(),
+                        member.getUser().getUsername(),
+                        MediaUtils.convertToDTO(member.getUser().getPhotograph())))
+                .collect(Collectors.toSet());
+    }
+
+
 }
