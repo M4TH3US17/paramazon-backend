@@ -1,5 +1,7 @@
-package br.com.paramazon.demo.application.dto;
+package br.com.paramazon.demo.application.dto.show.presentation;
 
+import br.com.paramazon.demo.application.dto.media.MediaDTO;
+import br.com.paramazon.demo.application.dto.show.band.BandDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.*;
 

@@ -1,10 +1,12 @@
 package br.com.paramazon.demo.utils.user;
 
-import br.com.paramazon.demo.application.dto.UserProfileDTO;
+import br.com.paramazon.demo.application.dto.user.profile.UserPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.UserProfileDTO;
+import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.user.User;
 import br.com.paramazon.demo.utils.Utils;
 import br.com.paramazon.demo.utils.media.MediaUtils;
-import br.com.paramazon.demo.utils.show.band.BandUtils;
+import br.com.paramazon.demo.utils.user.role.RoleUtils;
 import lombok.*;
 
 import java.util.*;
@@ -13,18 +15,58 @@ import java.util.stream.Collectors;
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class UserUtils {
 
+    /**
+     * Converte uma lista de entidades User em uma lista de UserProfileDTO.
+     *
+     * @param users Um conjunto de entidades usuario do tipo User.
+     * @return Um conjunto de UserProfileDTO.
+     */
     public static List<UserProfileDTO> buildBaseUserList(List<User> users) {
         return users.stream()
-                .map(user -> convertToDTO(user))
+                .map(user -> convertUserToDTO(user))
                 .collect(Collectors.toList());
     }
 
-    public static UserProfileDTO convertToDTO(User data) {
+    /**
+     * Converte uma lista de entidades bandas para uma lista de DTO de preferências de usuário.
+     *
+     * @param preferences Um conjunto de entidades banda.
+     * @return Um conjunto de DTO de preferências de usuário.
+     */
+    public static Set<UserPreferenceDTO> buildBaseUserPreferenceList(Set<Band> preferences) {
+        return preferences.stream()
+                .map(band -> convertUserPreferenceToDTO(band))
+                .collect(Collectors.toSet());
+    }
+
+    /**
+     * Converte uma unica entidade User em um UserProfileDTO.
+     *
+     * @param data A entidade do tipo User a ser convertida.
+     * @return Um UserProfileDTO de usuário.
+     */
+    public static UserProfileDTO convertUserToDTO(User data) {
         return new UserProfileDTO(
+                data.getIdUser(),
                 data.getUsername(),
                 MediaUtils.convertToDTO(data.getPhotograph()),
                 Utils.convertValidationEmailToDTO(data.getEmail()),
-                BandUtils.buildBaseBandList(data.getPreferences())
+                UserUtils.buildBaseUserPreferenceList(data.getPreferences()),
+                RoleUtils.buildBaseRoleList(data.getRole()));
+    }
+
+    /**
+     * Converte uma unica entidade Band para UserPreferenceDTO.
+     *
+     * @param data A entidade do tipo Band a ser convertida.
+     * @return Um UserPreferenceDTO.
+     */
+    public static UserPreferenceDTO convertUserPreferenceToDTO(Band data) {
+        return new UserPreferenceDTO(
+                data.getIdBand(),
+                data.getName(),
+                MediaUtils.convertToDTO(data.getPhotograph()),
+                data.getDescription()
         );
     }
 }

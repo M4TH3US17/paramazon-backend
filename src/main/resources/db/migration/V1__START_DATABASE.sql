@@ -7,9 +7,9 @@ CREATE FUNCTION is_singer(id_user BIGINT) RETURNS BOOLEAN AS $$
 DECLARE
     ROLE_ID   BIGINT;
 BEGIN
-    ROLE_ID = (SELECT role_id FROM usuario_role WHERE user_id = id_user);
-
-	RETURN ROLE_ID = (SELECT id FROM role WHERE name = 'ROLE_SINGER');
+    RETURN EXISTS (SELECT 1
+                   FROM user_role ur
+                   WHERE ur.user_id = id_user AND ur.role_id = (SELECT id FROM role WHERE name = 'ROLE_SINGER'));
 END; $$ LANGUAGE plpgsql;
 
 -- 2.2 MEDIA (ARMAZENA IMAGENS E VIDEOS)

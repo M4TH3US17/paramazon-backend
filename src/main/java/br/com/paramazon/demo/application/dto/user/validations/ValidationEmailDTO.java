@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.application.dto;
+package br.com.paramazon.demo.application.dto.user.validations;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.*;

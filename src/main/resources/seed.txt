@@ -1,0 +1,43 @@
+INSERT INTO music (name, status, style) VALUES
+('NOME_MUSICA_1', 'ACTIVE', 'BREGA'),
+('NOME_MUSICA_2', 'ACTIVE', 'MELODY'),
+('NOME_MUSICA_3', 'ACTIVE', 'PAGODE'),
+('NOME_MUSICA_4', 'ACTIVE', 'SERTANEJO'),
+('NOME_MUSICA_5', 'INACTIVE', 'BREGA');
+
+INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_1', 'IMAGE', CURRENT_DATE);
+INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_2', 'IMAGE', CURRENT_DATE);
+INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_3', 'IMAGE', CURRENT_DATE);
+INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_4', 'IMAGE', CURRENT_DATE);
+INSERT INTO media (s3_key, type, upload_date) VALUES ('BANDA_S3_KEY_PHOTOGRAPH', 'IMAGE', CURRENT_DATE);
+
+INSERT INTO validation_email (email, verification_code, is_confirmed)
+VALUES
+    ('EMAIL_ADMIN_1@example.com', 111111, true),
+	('EMAIL_SINGER_1@example.com', 22222, true),
+    ('EMAIL_USUARIO_1@example.com', 333333, false),
+    ('EMAIL_USUARIO_2@example.com', 444444, false);
+
+INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_USER'), ('ROLE_SINGER');
+
+INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_1', 'PASSWORD_ADMIN_1', 1, CURRENT_DATE, 1, 'ACTIVE');
+INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_2', 'PASSWORD_USER_1', 3, CURRENT_DATE, 2, 'ACTIVE');
+INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_3', 'PASSWORD_SINGER_1', 2, CURRENT_DATE, 3, 'ACTIVE');
+INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_4', 'PASSWORD_USER_2', 4, CURRENT_DATE, 4, 'INACTIVE');
+
+INSERT INTO user_role (user_id, role_id) VALUES
+(1, 1),
+(1, 2),
+(2, 2),
+(3, 2),
+(3, 3),
+(4, 2);
+
+INSERT INTO band (name, media_id, status, total_payment, description, create_date)
+VALUES ('BANDA_1', 5, 'ACTIVE', 1000,  'BANDA_1_DESCRICAO', CURRENT_DATE);
+
+INSERT INTO band_singer (band_id, user_id, payment) VALUES (1, 3, 1000);
+
+INSERT INTO band_playlist (band_id, music_id) VALUES (1, 2), (1, 1), (1, 5);
+
+INSERT INTO user_preference (user_id, band_id) VALUES (1, 1);

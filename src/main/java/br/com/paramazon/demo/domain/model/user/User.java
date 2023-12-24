@@ -6,6 +6,7 @@ import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.user.role.Role;
 import br.com.paramazon.demo.domain.model.user.validations.ValidationEmail;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;

@@ -1,8 +1,10 @@
-package br.com.paramazon.demo.application.dto;
+package br.com.paramazon.demo.application.dto.show.band;
 
+import br.com.paramazon.demo.application.dto.media.MediaDTO;
+import br.com.paramazon.demo.application.dto.music.MusicDTO;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.*;
-import lombok.*;
 
 import java.io.Serializable;
 import java.util.Set;

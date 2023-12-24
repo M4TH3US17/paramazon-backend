@@ -2,6 +2,7 @@ package br.com.paramazon.demo.domain.model.music;
 
 import br.com.paramazon.demo.domain.enums.MusicalStyle;
 import br.com.paramazon.demo.domain.enums.Status;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;

@@ -2,6 +2,7 @@ package br.com.paramazon.demo.domain.model.show.band.bandSinger;
 
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.user.User;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
@@ -18,12 +19,12 @@ public class BandSinger implements Serializable {
     @EmbeddedId
     private BandSingerId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("bandId")
     @JoinColumn(name = "band_id")
     private Band band;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("userId")
     @JoinColumn(name = "user_id")
     private User user;
