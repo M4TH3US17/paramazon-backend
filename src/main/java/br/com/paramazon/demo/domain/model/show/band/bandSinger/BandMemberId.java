@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import java.io.Serializable;
 
 @Embeddable
-public class BandSingerId implements Serializable {
+public class BandMemberId implements Serializable {
 
     @Column(name = "band_id", nullable = false)
     private Long bandId;

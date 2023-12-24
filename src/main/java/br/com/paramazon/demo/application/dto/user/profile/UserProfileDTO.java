@@ -1,7 +1,7 @@
 package br.com.paramazon.demo.application.dto.user.profile;
 
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
-import br.com.paramazon.demo.application.dto.user.profile.preferences.UserPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.preferences.UserProfilePreferenceDTO;
 import br.com.paramazon.demo.application.dto.user.validations.ValidationEmailDTO;
 import br.com.paramazon.demo.application.dto.user.role.RoleDTO;
 import com.fasterxml.jackson.annotation.*;
@@ -22,7 +22,7 @@ public record UserProfileDTO(
         @ApiModelProperty(value = "E-mail cadastrado do Usuario", example = "teste@teste.com.br")
         ValidationEmailDTO email,
         @ApiModelProperty(value = "Bandas preferidas do Usuario.")
-        Set<UserPreferenceDTO> preferences,
+        Set<UserProfilePreferenceDTO> preferences,
         @ApiModelProperty(value = "Niveis de acesso do Usuario.")
         Set<RoleDTO> roles) {
 

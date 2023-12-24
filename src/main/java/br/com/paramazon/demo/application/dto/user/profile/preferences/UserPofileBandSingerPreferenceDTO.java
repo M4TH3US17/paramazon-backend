@@ -1,6 +1,5 @@
 package br.com.paramazon.demo.application.dto.user.profile.preferences;
 
-import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 
@@ -8,7 +7,7 @@ import io.swagger.annotations.ApiModel;
 @ApiModel(discriminator = "User Singer Band Preference",
         value = "User Singer Band Preference",
         description = "Membros pertecentes as bandas preferidas do usuario.")
-public record UserBandSingerPreferenceDTO(
+public record UserPofileBandSingerPreferenceDTO(
         String member,
-        MediaDTO photograph) {
+        String photograph) {
 }

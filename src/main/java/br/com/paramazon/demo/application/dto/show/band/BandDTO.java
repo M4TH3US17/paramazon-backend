@@ -2,11 +2,11 @@ package br.com.paramazon.demo.application.dto.show.band;
 
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import br.com.paramazon.demo.application.dto.music.MusicDTO;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.*;
 
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 @JsonInclude(JsonInclude.Include.NON_NULL)
@@ -18,7 +18,7 @@ public record BandDTO(
         Double totalPayment,
         String description,
         Set<MusicDTO> playlist,
-        Set<BandSingerDTO> bandSingers
+        List<BandMemberDTO> members
 ) implements Serializable {
 
 }

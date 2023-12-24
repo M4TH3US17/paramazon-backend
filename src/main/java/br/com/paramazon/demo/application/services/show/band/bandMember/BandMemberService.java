@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.application.services.show.band.bandSinger;
+package br.com.paramazon.demo.application.services.show.band.bandMember;
 
 import br.com.paramazon.demo.domain.repository.show.band.BandSingerRepository;
 import lombok.RequiredArgsConstructor;
@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 @Slf4j
 @Service
 @RequiredArgsConstructor
-public class BandSingerService {
+public class BandMemberService {
 
     private final BandSingerRepository repository;
 

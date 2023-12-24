@@ -3,7 +3,6 @@ package br.com.paramazon.demo.domain.model.show.band.bandSinger;
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.user.User;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;
@@ -15,12 +14,12 @@ import java.io.Serializable;
 @Entity @Table(name = "band_singer")
 @AllArgsConstructor
 @JsonInclude(JsonInclude.Include.NON_NULL)
-public class BandSinger implements Serializable {
+public class BandMember implements Serializable {
 
     @EmbeddedId
-    private BandSingerId id;
+    private BandMemberId id;
 
-    @ManyToOne
+    @ManyToOne(fetch = FetchType.EAGER)
     @MapsId("bandId")
     @JoinColumn(name = "band_id")
     @JsonBackReference

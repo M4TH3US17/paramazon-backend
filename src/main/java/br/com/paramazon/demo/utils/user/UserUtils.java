@@ -1,10 +1,9 @@
 package br.com.paramazon.demo.utils.user;
 
-import br.com.paramazon.demo.application.dto.user.profile.preferences.UserBandSingerPreferenceDTO;
-import br.com.paramazon.demo.application.dto.user.profile.preferences.UserPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.preferences.UserPofileBandSingerPreferenceDTO;
+import br.com.paramazon.demo.application.dto.user.profile.preferences.UserProfilePreferenceDTO;
 import br.com.paramazon.demo.application.dto.user.profile.UserProfileDTO;
 import br.com.paramazon.demo.domain.model.show.band.Band;
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandSinger;
 import br.com.paramazon.demo.domain.model.user.User;
 import br.com.paramazon.demo.utils.Utils;
 import br.com.paramazon.demo.utils.media.MediaUtils;
@@ -35,7 +34,7 @@ public class UserUtils {
      * @param preferences Um conjunto de entidades banda.
      * @return Um conjunto de DTO de preferências de usuário.
      */
-    public static Set<UserPreferenceDTO> buildBaseUserPreferenceList(Set<Band> preferences) {
+    public static Set<UserProfilePreferenceDTO> buildBaseUserPreferenceList(Set<Band> preferences) {
         return preferences.stream()
                 .map(band -> convertUserPreferenceToDTO(band))
                 .collect(Collectors.toSet());
@@ -58,32 +57,24 @@ public class UserUtils {
     }
 
     /**
-     * Converte uma unica entidade Band para UserPreferenceDTO.
+     * Converte uma unica entidade Band para UserProfilePreferenceDTO.
      *
      * @param data A entidade do tipo Band a ser convertida.
-     * @return Um UserPreferenceDTO.
+     * @return Um UserProfilePreferenceDTO.
      */
-    public static UserPreferenceDTO convertUserPreferenceToDTO(Band data) {
-        return new UserPreferenceDTO(
+    public static UserProfilePreferenceDTO convertUserPreferenceToDTO(Band data) {
+        Set<UserPofileBandSingerPreferenceDTO> bandMemberList = data.getBandMembers().stream()
+                                                         .map(member -> new UserPofileBandSingerPreferenceDTO(
+                                                                 member.getUser().getUsername(),
+                                                                 member.getUser().getPhotograph().getS3Key()))
+                                                         .collect(Collectors.toSet());
+
+        return new UserProfilePreferenceDTO(
                 data.getIdBand(),
                 data.getName(),
-                MediaUtils.convertToDTO(data.getPhotograph()),
-                convertListOfBandMembersToDTO(data.getBandSingers()),
+                data.getPhotograph().getS3Key(),
+                bandMemberList,
                 data.getDescription());
-    }
-
-    /**
-     * Converte a coleção de membros de uma banda (preferida do usuario) para um conjunto de DTOs UserBandSingerPreferenceDTO.
-     *
-     * @param bandMembers A coleção de entidades de usuário representando os membros da banda.
-     * @return Um conjunto de DTOs UserBandSingerPreferenceDTO.
-     */
-    private static Set<UserBandSingerPreferenceDTO> convertListOfBandMembersToDTO(Set<BandSinger> bandMembers) {
-        return bandMembers.stream()
-                .map(member -> new UserBandSingerPreferenceDTO(
-                        member.getUser().getUsername(),
-                        MediaUtils.convertToDTO(member.getUser().getPhotograph())))
-                .collect(Collectors.toSet());
     }
 
 

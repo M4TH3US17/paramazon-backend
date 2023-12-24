@@ -3,11 +3,8 @@ package br.com.paramazon.demo.domain.model.show.band;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.music.Music;
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandSinger;
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandMember;
 import com.fasterxml.jackson.annotation.JsonInclude;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -54,20 +51,20 @@ public class Band implements Serializable {
     private Set<Music> playlist;
 
     @OneToMany(mappedBy = "band", fetch = FetchType.LAZY)
-    private Set<BandSinger> bandSingers;
+    private Set<BandMember> bandMembers;
 
     @PrePersist
     private void prePersist() {
         this.createDate = LocalDate.now();
     }
 
-    public void addBandSinger(BandSinger bandSinger) {
-        bandSingers.add(bandSinger);
+    public void addBandSinger(BandMember bandSinger) {
+        bandMembers.add(bandSinger);
         bandSinger.setBand(this);
     }
 
-    public void removeBandSinger(BandSinger bandSinger) {
-        bandSingers.remove(bandSinger);
+    public void removeBandSinger(BandMember bandSinger) {
+        bandMembers.remove(bandSinger);
         bandSinger.setBand(null);
     }
 

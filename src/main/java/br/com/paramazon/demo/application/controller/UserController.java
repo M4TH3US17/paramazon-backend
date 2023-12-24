@@ -40,7 +40,7 @@ public class UserController {
     @ApiOperation(value = "Recupera um usuario atraves do id", response = UserResponse.class, httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna Usuario da base conforme o padrão do Objeto abaixo", response = UserResponse.class),
-            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrado o projeto solicitado"/*, response = NotFound404002Response.class*/)
+            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrado o usuario solicitado"/*, response = NotFound404002Response.class*/)
     })
     public ResponseEntity<?> obterUsuarioPorId(@PathVariable(name = "idUser") Long idUser) {
         log.info("UserController :: Iniciando o processo de obtenção de usuario de idUser = {}", idUser);
