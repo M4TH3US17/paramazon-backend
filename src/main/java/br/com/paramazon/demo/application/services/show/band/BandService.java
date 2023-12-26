@@ -43,10 +43,9 @@ public class BandService {
 
     public BandResponse getBandById(Long idBand) {
         log.info("BandService :: Obtendo banda por id...");
-        Optional<Band> band = repository.findById(idBand);
-        boolean isActive = Objects.equals(band.get().getStatus(), Status.ACTIVE);
+        Optional<Band> band = repository.findByIdBandAndStatus(idBand, Status.ACTIVE);
 
-        if(band.isPresent() && isActive) {
+        if(band.isPresent()) {
             log.info("BandService :: Banda de id {} localizada com sucesso!", idBand);
             return new BandResponse(
                     HttpStatus.OK.value(),

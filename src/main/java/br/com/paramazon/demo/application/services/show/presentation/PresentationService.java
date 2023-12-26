@@ -19,7 +19,7 @@ public class PresentationService {
 
     private final PresentationRepository repository;
 
-    public PresentationResponse getAllBands() {
+    public PresentationResponse getAllPresentations() {
         log.info("PresentationService :: Obtendo todas as apresentacoes cadastrados no sistema...");
         List<Presentation> activePresentations = repository.findAllByStatus(Status.ACTIVE);
 
@@ -37,12 +37,11 @@ public class PresentationService {
                 PresentationUtils.buildBasePresentationList(activePresentations));
     }
 
-    public PresentationResponse getBandById(Long idPresentation) {
+    public PresentationResponse getPresentationById(Long idPresentation) {
         log.info("PresentationService :: Obtendo apresentacao por id...");
-        Optional<Presentation> presentation = repository.findById(idPresentation);
-        boolean isActive = Objects.equals(presentation.get().getStatus(), Status.ACTIVE);
+        Optional<Presentation> presentation = repository.findByIdPresentationAndStatus(idPresentation, Status.ACTIVE);
 
-        if(presentation.isPresent() && isActive) {
+        if(presentation.isPresent()) {
             log.info("PresentationService :: Apresentacao de id {} localizada com sucesso!", idPresentation);
             return new PresentationResponse(
                     HttpStatus.OK.value(),

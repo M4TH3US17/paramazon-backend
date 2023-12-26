@@ -6,8 +6,7 @@ import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
 import io.swagger.annotations.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j

@@ -40,7 +40,7 @@ public class UserService {
 
     public UserResponse getUserById(Long idUser) {
         log.info("UserService :: Iniciando a busca de usuario...");
-        Optional<User> user = repository.findById(idUser);
+        Optional<User> user = repository.findByIdUserAndStatus(idUser, Status.ACTIVE);
 
         if(user.isPresent()) {
             log.info("UserService :: Usuario encontrado!");

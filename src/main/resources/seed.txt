@@ -45,3 +45,7 @@ INSERT INTO user_preference (user_id, band_id) VALUES (1, 1);
 
 INSERT INTO presentation (status, band_id, media_id, start_presentation, end_presentation, description)
 VALUES ('ACTIVE', 1, 6, CURRENT_TIME, CURRENT_TIME, 'PRESENTATION_1_DESCRICAO');
+
+INSERT INTO show (date, status, budget) VALUES (CURRENT_DATE, 'ACTIVE', 1000.0);
+
+INSERT INTO show_presentation (show_id, presentation_id) VALUES (1, 1);

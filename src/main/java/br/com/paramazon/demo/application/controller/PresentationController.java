@@ -31,7 +31,7 @@ public class PresentationController {
     })
     public ResponseEntity<?> obterTodosApresentacoes() {
         log.info("PresentationController :: Iniciando o processo de obtenção de todas apresentacoes cadastradas no sistema!");
-        var response = service.getAllBands();
+        var response = service.getAllPresentations();
         return ResponseEntity.status(response.code()).body(response);
     }
 
@@ -44,7 +44,7 @@ public class PresentationController {
     })
     public ResponseEntity<?> obterApresentacaoPorId(@PathVariable(name = "idPresentation") Long idPresentation) {
         log.info("PresentationController :: Iniciando o processo de obtenção de apresentacao de idPresentation = {}", idPresentation);
-        var response = service.getBandById(idPresentation);
+        var response = service.getPresentationById(idPresentation);
         return ResponseEntity.status(response.code()).body(response);
     }
 }
