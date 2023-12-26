@@ -2,7 +2,6 @@ package br.com.paramazon.demo.utils.show.band;
 
 import br.com.paramazon.demo.application.dto.show.band.BandDTO;
 import br.com.paramazon.demo.domain.model.show.band.Band;
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandMember;
 import br.com.paramazon.demo.utils.media.MediaUtils;
 import br.com.paramazon.demo.utils.music.MusicUtils;
 import br.com.paramazon.demo.utils.show.band.bandMember.BandMemberUtils;

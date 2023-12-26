@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.domain.model.show.band.bandSinger;
+package br.com.paramazon.demo.domain.model.show.band.bandMember;
 
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.user.User;

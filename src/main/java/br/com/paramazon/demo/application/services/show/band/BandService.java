@@ -13,6 +13,8 @@ import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -40,6 +42,21 @@ public class BandService {
     }
 
     public BandResponse getBandById(Long idBand) {
-        return null;
+        log.info("BandService :: Obtendo banda por id...");
+        Optional<Band> band = repository.findById(idBand);
+        boolean isActive = Objects.equals(band.get().getStatus(), Status.ACTIVE);
+
+        if(band.isPresent() && isActive) {
+            log.info("BandService :: Banda de id {} localizada com sucesso!", idBand);
+            return new BandResponse(
+                    HttpStatus.OK.value(),
+                    String.format("Segue os dados da banda de id %d", idBand),
+                    BandUtils.convertToDTO(band.get()));
+        }
+
+        return new BandResponse(
+                HttpStatus.NOT_FOUND.value(),
+                "Não foi encontrado nenhuma banda na base",
+                null);
     }
 }

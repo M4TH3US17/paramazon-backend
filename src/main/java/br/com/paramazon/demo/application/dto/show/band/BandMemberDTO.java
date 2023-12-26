@@ -1,6 +1,5 @@
 package br.com.paramazon.demo.application.dto.show.band;
 
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandMemberId;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 

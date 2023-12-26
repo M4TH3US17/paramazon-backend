@@ -3,7 +3,7 @@ package br.com.paramazon.demo.domain.model.show.band;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.music.Music;
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandMember;
+import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.*;

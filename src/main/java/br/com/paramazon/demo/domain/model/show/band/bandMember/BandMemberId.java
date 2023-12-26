@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.domain.model.show.band.bandSinger;
+package br.com.paramazon.demo.domain.model.show.band.bandMember;
 
 import jakarta.persistence.*;
 

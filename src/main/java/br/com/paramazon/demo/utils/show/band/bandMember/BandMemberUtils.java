@@ -1,12 +1,10 @@
 package br.com.paramazon.demo.utils.show.band.bandMember;
 
 import br.com.paramazon.demo.application.dto.show.band.BandMemberDTO;
-import br.com.paramazon.demo.domain.model.show.band.bandSinger.BandMember;
-import br.com.paramazon.demo.utils.user.UserUtils;
+import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
 import lombok.*;
 
 import java.util.List;
-import java.util.Set;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
