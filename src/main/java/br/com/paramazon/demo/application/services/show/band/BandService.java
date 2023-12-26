@@ -49,10 +49,7 @@ public class BandService {
                     BandUtils.convertToDTO(band.get()));
         }
 
-        return new BandResponse(
-                HttpStatus.NOT_FOUND.value(),
-                "Não foi encontrado nenhuma banda na base",
-                null);
+        return returnsError404NotFoundResponse("Não foi encontrado nenhuma banda na base",null);
     }
 
     public BandResponse disableBand(Long idBand) {
@@ -60,7 +57,7 @@ public class BandService {
         Optional<Band> band = repository.findByIdBandAndStatus(idBand, Status.ACTIVE);
         try {
             if (band.isEmpty())
-                return new BandResponse(HttpStatus.NOT_FOUND.value(), "Banda nao encontrada!", null);
+                return returnsError404NotFoundResponse("Banda nao encontrada!", null);
 
             log.info("BandService :: Banda encontrada!");
             Band bandToBeDeleted = band.get();
@@ -70,7 +67,32 @@ public class BandService {
             log.info("BandService :: Banda desativada com sucesso!");
             return new BandResponse(HttpStatus.NO_CONTENT.value(), "Banda desativada com sucesso!", "");
         } catch (Exception e) {
-            return /*setaInternalServerErroResponse(e)*/ null;
+            return returnsError500InternalServerErrorResponse(e);
         }
+    }
+
+    /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
+    private BandResponse returnsError404NotFoundResponse(String message, Object aFalse) {
+        log.info("Não foi possivel encontrar nenhuma banda!");
+        return new BandResponse(
+                HttpStatus.NOT_FOUND.value(),
+                message,
+                Objects.nonNull(aFalse) ? aFalse : null);
+    }
+
+    private BandResponse returnsError500InternalServerErrorResponse(Exception error) {
+        log.error(error.getLocalizedMessage());
+        return new BandResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro desconhecido!",
+                error);
+    }
+
+    private BandResponse returnsError400BadRequestResponse(String message) {
+        log.info(message);
+        return new BandResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                message,
+                null);
     }
 }

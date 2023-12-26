@@ -25,10 +25,7 @@ public class ShowService {
 
         if (activeShows.isEmpty()) {
             log.info("ShowService :: Nenhum show encontrado!");
-            return new ShowResponse(
-                    HttpStatus.NOT_FOUND.value(),
-                    "Não foi encontrado nenhum show na base",
-                    null);
+            return returnsError404NotFoundResponse("Não foi encontrado nenhum show na base", null);
         }
 
         return new ShowResponse(
@@ -49,10 +46,7 @@ public class ShowService {
             );
         }
 
-        return new ShowResponse(
-                HttpStatus.NOT_FOUND.value(),
-                String.format("Show cujo id é %d não existe", idShow),
-                null);
+        return returnsError404NotFoundResponse("Show cujo id é %d não existe", null);
     }
 
     public ShowResponse disableShow(Long idShow) {
@@ -70,8 +64,33 @@ public class ShowService {
             log.info("ShowService :: Show desativado com sucesso!");
             return new ShowResponse(HttpStatus.NO_CONTENT.value(), "Show desativado com sucesso!", "");
         } catch (Exception e) {
-            return /*setaInternalServerErroResponse(e)*/ null;
+            return returnsError500InternalServerErrorResponse(e);
         }
+    }
+
+    /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
+    private ShowResponse returnsError404NotFoundResponse(String message, Object aFalse) {
+        log.info("Não foi possivel encontrar o show!");
+        return new ShowResponse(
+                HttpStatus.NOT_FOUND.value(),
+                message,
+                Objects.nonNull(aFalse) ? aFalse : null);
+    }
+
+    private ShowResponse returnsError500InternalServerErrorResponse(Exception error) {
+        log.error(error.getLocalizedMessage());
+        return new ShowResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro desconhecido!",
+                error);
+    }
+
+    private ShowResponse returnsError400BadRequestResponse(String message) {
+        log.info(message);
+        return new ShowResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                message,
+                null);
     }
 
 }

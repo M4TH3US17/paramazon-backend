@@ -3,6 +3,7 @@ package br.com.paramazon.demo.application.services.show.presentation;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
+import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
 import lombok.RequiredArgsConstructor;
@@ -25,10 +26,7 @@ public class PresentationService {
 
         if (activePresentations.isEmpty()) {
             log.info("PresentationService :: Nenhuma apresentacao encontrada!");
-            return new PresentationResponse(
-                    HttpStatus.NOT_FOUND.value(),
-                    "Não foi encontrado nenhuma apresentacao na base",
-                    new ArrayList<>());
+            return returnsError404NotFoundResponse("Não foi encontrado nenhuma apresentacao na base", new ArrayList<>());
         }
 
         return new PresentationResponse(
@@ -49,10 +47,7 @@ public class PresentationService {
                     PresentationUtils.convertToDTO(presentation.get()));
         }
 
-        return new PresentationResponse(
-                HttpStatus.NOT_FOUND.value(),
-                String.format("Não foi encontrado nenhuma apresentacao de id %d na base", idPresentation),
-                null);
+        return returnsError404NotFoundResponse(String.format("Não foi encontrado nenhuma apresentacao de id %d na base"), null);
     }
 
     public PresentationResponse disablePresentation(Long idPresentation) {
@@ -60,7 +55,7 @@ public class PresentationService {
         Optional<Presentation> presentation = repository.findByIdPresentationAndStatus(idPresentation, Status.ACTIVE);
         try {
             if (presentation.isEmpty())
-                return new PresentationResponse(HttpStatus.NOT_FOUND.value(), "Presentation nao encontrado!", null);
+                return returnsError404NotFoundResponse("Presentation nao encontrado!", null);
 
             log.info("PresentationService :: Presentation encontrada!");
             Presentation presentationToBeDeleted = presentation.get();
@@ -70,7 +65,32 @@ public class PresentationService {
             log.info("PresentationService :: Presentation desativada com sucesso!");
             return new PresentationResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativado com sucesso!", "");
         } catch (Exception e) {
-            return /*setaInternalServerErroResponse(e)*/ null;
+            return returnsError500InternalServerErrorResponse(e);
         }
+    }
+
+    /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
+    private PresentationResponse returnsError404NotFoundResponse(String message, Object aFalse) {
+        log.info("Não foi possivel encontrar nenhuma apresentacao!");
+        return new PresentationResponse(
+                HttpStatus.NOT_FOUND.value(),
+                message,
+                Objects.nonNull(aFalse) ? aFalse : null);
+    }
+
+    private PresentationResponse returnsError500InternalServerErrorResponse(Exception error) {
+        log.error(error.getLocalizedMessage());
+        return new PresentationResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                "Ocorreu um erro desconhecido!",
+                error);
+    }
+
+    private PresentationResponse returnsError400BadRequestResponse(String message) {
+        log.info(message);
+        return new PresentationResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                message,
+                null);
     }
 }
