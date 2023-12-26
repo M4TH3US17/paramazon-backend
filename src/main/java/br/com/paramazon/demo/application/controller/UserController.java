@@ -46,4 +46,18 @@ public class UserController {
         var response = service.getUserById(idUser);
         return ResponseEntity.status(response.code()).body(response);
     }
+
+    @SneakyThrows
+    @DeleteMapping(value = "/delete/{idUser}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Deleta/desativa usuario cadastrado."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Retorna caso o usuario tenha sido desativado com sucesso!", response = UserResponse.class),
+            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrado o usuario solicitado"/*, response = NotFound404002Response.class*/),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> desativarUsuario(@PathVariable(name = "idUser") Long idUser) {
+        log.info("UserController :: Iniciando o processo de desativação do usuario de idUser {}", idUser);
+        var response = service.disableUser(idUser);
+        return ResponseEntity.status(response.code()).body(response);
+    }
 }

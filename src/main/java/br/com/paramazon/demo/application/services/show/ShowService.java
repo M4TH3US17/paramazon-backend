@@ -44,7 +44,7 @@ public class ShowService {
             log.info("ShowService :: Show encontrado!");
             return new ShowResponse(
                     HttpStatus.OK.value(),
-                    String.format("Segue os dados dados do show de id %d", idShow),
+                    String.format("Segue os dados do show de id %d", idShow),
                     ShowUtils.convertToDTO(show.get())
             );
         }

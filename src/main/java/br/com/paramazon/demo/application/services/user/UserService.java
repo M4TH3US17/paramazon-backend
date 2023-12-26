@@ -28,8 +28,7 @@ public class UserService {
             return new UserResponse(
                     HttpStatus.NOT_FOUND.value(),
                     "Não foi encontrado nenhum usuario na base",
-                    new ArrayList<>()
-            );
+                    new ArrayList<>());
         }
 
         return new UserResponse(
@@ -47,13 +46,32 @@ public class UserService {
             return new UserResponse(
                     HttpStatus.OK.value(),
                     String.format("Segue os dados dados do usuário de id %d", idUser),
-                    UserUtils.convertUserToDTO(user.get())
-            );
+                    UserUtils.convertUserToDTO(user.get()));
         }
 
         return new UserResponse(
                 HttpStatus.NOT_FOUND.value(),
                 String.format("Usuario cujo id é %d não existe", idUser),
                 null);
+    }
+
+    public UserResponse disableUser(Long idUser) {
+        log.info("UserService :: Iniciando etapa de desativação do usuario");
+        Optional<User> user = repository.findByIdUserAndStatus(idUser, Status.ACTIVE);
+        try {
+            if (user.isEmpty())
+                return new UserResponse(HttpStatus.NOT_FOUND.value(), "Usuario nao encontrado!", null);
+
+            log.info("UserService :: Usuario encontrado!");
+            User user2 = user.get();
+            log.info("UsuarioService :: Desativando usuario...");
+            user2.setStatus(Status.INACTIVE);
+            repository.save(user2);
+            user2.setPassword(/*bCryptPasswordEncoder.encode(*/"usu@r10D3s@t1v@do"/*)*/);
+            log.info("UserService :: Usuario desativado com sucesso!");
+            return new UserResponse(HttpStatus.NO_CONTENT.value(), "Usuario desativado com sucesso!", "");
+        } catch (Exception e) {
+            return /*setaInternalServerErroResponse(e)*/ null;
+        }
     }
 }
