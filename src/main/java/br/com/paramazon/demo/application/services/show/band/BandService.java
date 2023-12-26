@@ -4,17 +4,13 @@ import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.repository.show.band.BandRepository;
 import br.com.paramazon.demo.infrastructure.response.shows.band.BandResponse;
-import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
 import br.com.paramazon.demo.utils.show.band.BandUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 @Slf4j
 @Service
@@ -57,5 +53,24 @@ public class BandService {
                 HttpStatus.NOT_FOUND.value(),
                 "Não foi encontrado nenhuma banda na base",
                 null);
+    }
+
+    public BandResponse disableBand(Long idBand) {
+        log.info("BandService :: Iniciando etapa de desativação da banda");
+        Optional<Band> band = repository.findByIdBandAndStatus(idBand, Status.ACTIVE);
+        try {
+            if (band.isEmpty())
+                return new BandResponse(HttpStatus.NOT_FOUND.value(), "Banda nao encontrada!", null);
+
+            log.info("BandService :: Banda encontrada!");
+            Band bandToBeDeleted = band.get();
+            log.info("BandService :: Desativando banda...");
+            bandToBeDeleted.setStatus(Status.INACTIVE);
+            repository.save(bandToBeDeleted);
+            log.info("BandService :: Banda desativada com sucesso!");
+            return new BandResponse(HttpStatus.NO_CONTENT.value(), "Banda desativada com sucesso!", "");
+        } catch (Exception e) {
+            return /*setaInternalServerErroResponse(e)*/ null;
+        }
     }
 }

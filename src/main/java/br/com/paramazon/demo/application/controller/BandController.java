@@ -47,4 +47,18 @@ public class BandController {
         var response = service.getBandById(idBand);
         return ResponseEntity.status(response.code()).body(response);
     }
+
+    @SneakyThrows
+    @DeleteMapping(value = "/delete/{idBand}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Deleta/desativa banda cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Retorna caso a banda tenha sido desativado com sucesso!", response = BandResponse.class),
+            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrada a banda solicitado"/*, response = NotFound404002Response.class*/),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> desativarBanda(@PathVariable(name = "idBand") Long idBand) {
+        log.info("BandController :: Iniciando o processo de desativação da banda de idBand {}", idBand);
+        var response = service.disableBand(idBand);
+        return ResponseEntity.status(response.code()).body(response);
+    }
 }

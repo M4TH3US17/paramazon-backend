@@ -54,4 +54,23 @@ public class PresentationService {
                 String.format("Não foi encontrado nenhuma apresentacao de id %d na base", idPresentation),
                 null);
     }
+
+    public PresentationResponse disablePresentation(Long idPresentation) {
+        log.info("PresentationService :: Iniciando etapa de desativação de presentation");
+        Optional<Presentation> presentation = repository.findByIdPresentationAndStatus(idPresentation, Status.ACTIVE);
+        try {
+            if (presentation.isEmpty())
+                return new PresentationResponse(HttpStatus.NOT_FOUND.value(), "Presentation nao encontrado!", null);
+
+            log.info("PresentationService :: Presentation encontrada!");
+            Presentation presentationToBeDeleted = presentation.get();
+            log.info("PresentationService :: Desativando presentation...");
+            presentationToBeDeleted.setStatus(Status.INACTIVE);
+            repository.save(presentationToBeDeleted);
+            log.info("PresentationService :: Presentation desativada com sucesso!");
+            return new PresentationResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativado com sucesso!", "");
+        } catch (Exception e) {
+            return /*setaInternalServerErroResponse(e)*/ null;
+        }
+    }
 }

@@ -63,11 +63,11 @@ public class UserService {
                 return new UserResponse(HttpStatus.NOT_FOUND.value(), "Usuario nao encontrado!", null);
 
             log.info("UserService :: Usuario encontrado!");
-            User user2 = user.get();
+            User userToBeDeleted = user.get();
             log.info("UsuarioService :: Desativando usuario...");
-            user2.setStatus(Status.INACTIVE);
-            repository.save(user2);
-            user2.setPassword(/*bCryptPasswordEncoder.encode(*/"usu@r10D3s@t1v@do"/*)*/);
+            userToBeDeleted.setStatus(Status.INACTIVE);
+            repository.save(userToBeDeleted);
+            userToBeDeleted.setPassword(/*bCryptPasswordEncoder.encode(*/"usu@r10D3s@t1v@do"/*)*/);
             log.info("UserService :: Usuario desativado com sucesso!");
             return new UserResponse(HttpStatus.NO_CONTENT.value(), "Usuario desativado com sucesso!", "");
         } catch (Exception e) {

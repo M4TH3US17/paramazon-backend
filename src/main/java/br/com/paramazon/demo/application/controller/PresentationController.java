@@ -47,4 +47,18 @@ public class PresentationController {
         var response = service.getPresentationById(idPresentation);
         return ResponseEntity.status(response.code()).body(response);
     }
+
+    @SneakyThrows
+    @DeleteMapping(value = "/delete/{idPresentation}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Deleta/desativa Presentation cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Retorna caso a apresentacao tenha sido desativado com sucesso!", response = PresentationResponse.class),
+            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrada a apresentacao solicitada"/*, response = NotFound404002Response.class*/),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro caso algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> desativarPresentation(@PathVariable(name = "idPresentation") Long idPresentation) {
+        log.info("PresentationController :: Iniciando o processo de desativação da Presentation de idPresentation {}", idPresentation);
+        var response = service.disablePresentation(idPresentation);
+        return ResponseEntity.status(response.code()).body(response);
+    }
 }

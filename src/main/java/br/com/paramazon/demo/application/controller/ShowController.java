@@ -3,6 +3,7 @@ package br.com.paramazon.demo.application.controller;
 import br.com.paramazon.demo.application.dto.show.ShowDTO;
 import br.com.paramazon.demo.application.services.show.ShowService;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
+import br.com.paramazon.demo.infrastructure.response.shows.band.BandResponse;
 import io.swagger.annotations.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -44,6 +45,20 @@ public class ShowController {
     public ResponseEntity<?> obterShowPorId(@PathVariable(name = "idShow") Long idShow) {
         log.info("ShowController :: Iniciando o processo de obtenção de show de idShow = {}", idShow);
         var response = service.getShowById(idShow);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
+    @SneakyThrows
+    @DeleteMapping(value = "/delete/{idShow}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Deleta/desativa banda cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
+    @ApiResponses(value = {
+            @ApiResponse(code = 204, message = "Retorna caso a show tenha sido desativado com sucesso!", response = ShowResponse.class),
+            @ApiResponse(code = 404, message = "Retorna uma mensagem de erro quando não for encontrada o show solicitado"/*, response = NotFound404002Response.class*/),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro caso algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> desativarShow(@PathVariable(name = "idShow") Long idShow) {
+        log.info("ShowController :: Iniciando o processo de desativação da show de idShow {}", idShow);
+        var response = service.disableShow(idShow);
         return ResponseEntity.status(response.code()).body(response);
     }
 }

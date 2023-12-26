@@ -55,4 +55,23 @@ public class ShowService {
                 null);
     }
 
+    public ShowResponse disableShow(Long idShow) {
+        log.info("ShowService :: Iniciando etapa de desativação de show");
+        Optional<Show> show = repository.findByIdShowAndStatus(idShow, Status.ACTIVE);
+        try {
+            if (show.isEmpty())
+                return new ShowResponse(HttpStatus.NOT_FOUND.value(), "Show nao encontrado!", null);
+
+            log.info("ShowService :: Show encontrado!");
+            Show showToBeDeleted = show.get();
+            log.info("ShowService :: Desativando show...");
+            showToBeDeleted.setStatus(Status.INACTIVE);
+            repository.save(showToBeDeleted);
+            log.info("ShowService :: Show desativado com sucesso!");
+            return new ShowResponse(HttpStatus.NO_CONTENT.value(), "Show desativado com sucesso!", "");
+        } catch (Exception e) {
+            return /*setaInternalServerErroResponse(e)*/ null;
+        }
+    }
+
 }
