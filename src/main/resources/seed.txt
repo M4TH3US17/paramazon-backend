@@ -50,5 +50,8 @@ INSERT INTO show (date, status, budget) VALUES (CURRENT_DATE, 'ACTIVE', 1000.0);
 
 INSERT INTO show_presentation (show_id, presentation_id) VALUES (1, 1);
 
+INSERT INTO show_vote (total_votes, start_voting, end_voting, status) VALUES
+(0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE');
+
 INSERT INTO presentation_vote (presentation_id, votes, status)
 VALUES (1, 0, 'ACTIVE');

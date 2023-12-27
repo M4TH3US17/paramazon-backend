@@ -3,7 +3,6 @@ package br.com.paramazon.demo.application.controller;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationDTO;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationVoteDTO;
 import br.com.paramazon.demo.application.services.show.presentation.PresentationService;
-import br.com.paramazon.demo.application.services.show.showVote.presentationVote.PresentationVoteService;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
@@ -24,7 +23,6 @@ import org.springframework.web.bind.annotation.*;
 public class PresentationController {
 
     private final PresentationService service;
-    private final PresentationVoteService voteService;
 
     @SneakyThrows
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -67,7 +65,7 @@ public class PresentationController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/presentation-votes/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/votes/", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Recupera todos as PresentationVote cadastradas no sistema", response = PresentationVoteResponse.class, httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna uma lista de bandas conforme o padrão do Objeto abaixo", response = PresentationVoteDTO.class),
@@ -75,12 +73,12 @@ public class PresentationController {
     })
     public ResponseEntity<?> obterTodasVotacoesDeApresentacoes() {
         log.info("PresentationController :: Iniciando o processo de obtenção de todas votacoes de apresentacoes cadastradas no sistema!");
-        var response = voteService.getAllPresentationVotes();
+        var response = service.getAllPresentationVotes();
         return ResponseEntity.status(response.code()).body(response);
     }
 
     @SneakyThrows
-    @GetMapping(value = "/presentation-votes/{idPresentationVote}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/votes/{idPresentationVote}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Recupera uma votacao de apresentacao atraves do id", response = PresentationVoteResponse.class, httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna Presentation da base conforme o padrão do Objeto abaixo", response = PresentationVoteResponse.class),
@@ -88,12 +86,12 @@ public class PresentationController {
     })
     public ResponseEntity<?> obterVotacaoDeApresentacaoPorId(@PathVariable(name = "idPresentationVote") Long idPresentationVote) {
         log.info("PresentationController :: Iniciando o processo de obtenção de votacao de apresentacao de idPresentationVote = {}", idPresentationVote);
-        var response = voteService.getPresentationVoteById(idPresentationVote);
+        var response = service.getPresentationVoteById(idPresentationVote);
         return ResponseEntity.status(response.code()).body(response);
     }
 
     @SneakyThrows
-    @DeleteMapping(value = "/presentation-votes/delete/{idPresentationVote}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/votes/delete/{idPresentationVote}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta/desativa Presentation Vote cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Retorna caso a apresentacao a ser votada tenha sido desativado com sucesso!", response = PresentationVoteResponse.class),
@@ -102,7 +100,7 @@ public class PresentationController {
     })
     public ResponseEntity<?> desativarPresentationVote(@PathVariable(name = "idPresentationVote") Long idPresentationVote) {
         log.info("PresentationController :: Iniciando o processo de desativação da PresentationVote de idPresentationVote {}", idPresentationVote);
-        var response = voteService.disablePresentationVote(idPresentationVote);
+        var response = service.disablePresentationVote(idPresentationVote);
         return ResponseEntity.status(response.code()).body(response);
     }
 

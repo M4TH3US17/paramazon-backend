@@ -2,9 +2,13 @@ package br.com.paramazon.demo.application.services.show.presentation;
 
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
+import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
+import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.PresentationVoteRepository;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
+import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
+import br.com.paramazon.demo.utils.show.showVote.presentationVote.PresentationVoteUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -18,6 +22,9 @@ import java.util.*;
 public class PresentationService {
 
     private final PresentationRepository repository;
+    private final PresentationVoteRepository voteRepository;
+
+    private final static boolean IS_PRESENTATION_RESPONSE = true;
 
     public PresentationResponse getAllPresentations() {
         log.info("PresentationService :: Obtendo todas as apresentacoes cadastrados no sistema...");
@@ -25,7 +32,7 @@ public class PresentationService {
 
         if (activePresentations.isEmpty()) {
             log.info("PresentationService :: Nenhuma apresentacao encontrada!");
-            return returnsError404NotFoundResponse("Não foi encontrado nenhuma apresentacao na base", new ArrayList<>());
+            return returnsError404NotFoundResponse("Não foi encontrado nenhuma apresentacao na base", new ArrayList<>(), IS_PRESENTATION_RESPONSE);
         }
 
         return new PresentationResponse(
@@ -40,13 +47,10 @@ public class PresentationService {
 
         if(presentation.isPresent()) {
             log.info("PresentationService :: Apresentacao de id {} localizada com sucesso!", idPresentation);
-            return new PresentationResponse(
-                    HttpStatus.OK.value(),
-                    String.format("Segue os dados da apresentacao de id %d", idPresentation),
-                    PresentationUtils.convertToDTO(presentation.get()));
+            return new PresentationResponse(HttpStatus.OK.value(), String.format("Segue os dados da apresentacao de id %d", idPresentation), PresentationUtils.convertToDTO(presentation.get()));
         }
 
-        return returnsError404NotFoundResponse(String.format("Não foi encontrado nenhuma apresentacao de id %d na base"), null);
+        return returnsError404NotFoundResponse(String.format("Não foi encontrado nenhuma apresentacao de ID %d na base", idPresentation), null, IS_PRESENTATION_RESPONSE);
     }
 
     public PresentationResponse disablePresentation(Long idPresentation) {
@@ -54,7 +58,7 @@ public class PresentationService {
         Optional<Presentation> presentation = repository.findByIdPresentationAndStatus(idPresentation, Status.ACTIVE);
         try {
             if (presentation.isEmpty())
-                return returnsError404NotFoundResponse("Presentation nao encontrado!", null);
+                return returnsError404NotFoundResponse("Apresentação não encontrada!", null, IS_PRESENTATION_RESPONSE);
 
             log.info("PresentationService :: Presentation encontrada!");
             Presentation presentationToBeDeleted = presentation.get();
@@ -64,32 +68,83 @@ public class PresentationService {
             log.info("PresentationService :: Presentation desativada com sucesso!");
             return new PresentationResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativado com sucesso!", "");
         } catch (Exception e) {
-            return returnsError500InternalServerErrorResponse(e);
+            return returnsError500InternalServerErrorResponse(e, IS_PRESENTATION_RESPONSE);
+        }
+    }
+
+    /* ETAPA DE VOTACAO */
+    public PresentationVoteResponse getAllPresentationVotes() {
+        log.info("PresentationService :: Obtendo todas as apresentacoes cadastrados no sistema (votacao)...");
+        List<PresentationVote> activePresentationVotes = voteRepository.findAllByStatus(Status.ACTIVE);
+
+        if (activePresentationVotes.isEmpty()) {
+            log.info("PresentationService :: Nenhuma apresentacao encontrada! (votacao)");
+            return returnsError404NotFoundResponse("Não há apresentações disponíveis para votação no momento.", new ArrayList<>(), !IS_PRESENTATION_RESPONSE);
+        }
+
+        return new PresentationVoteResponse(
+                HttpStatus.OK.value(),
+                "Lista de apresentações disponíveis para votação encontradas.",
+                PresentationVoteUtils.buildBasePresentationVoteList(activePresentationVotes));
+    }
+
+    public PresentationVoteResponse getPresentationVoteById(Long idPresentationVote) {
+        log.info("PresentationService :: Obtendo apresentacao por id (votacao)...");
+        Optional<PresentationVote> presentationVote = voteRepository.findByIdPresentationVoteAndStatus(idPresentationVote, Status.ACTIVE);
+
+        if(presentationVote.isPresent()) {
+            log.info("PresentationService :: Apresentacao de id {} localizada com sucesso! (votacao)", idPresentationVote);
+            return new PresentationVoteResponse(
+                    HttpStatus.OK.value(),
+                    String.format("Dados da apresentação de ID %d disponíveis para votação.", idPresentationVote),
+                    PresentationVoteUtils.convertToDTO(presentationVote.get()));
+        }
+
+        return returnsError404NotFoundResponse(String.format("Não foi encontrada nenhuma apresentação para votação com o ID %d na base de dados.", idPresentationVote), null, !IS_PRESENTATION_RESPONSE);
+    }
+
+    public PresentationVoteResponse disablePresentationVote(Long idPresentationVote) {
+        log.info("PresentationService :: Iniciando etapa de desativação de presentation. (votacao)");
+        Optional<PresentationVote> presentationVote = voteRepository.findByIdPresentationVoteAndStatus(idPresentationVote, Status.ACTIVE);
+        try {
+            if (presentationVote.isEmpty())
+                return returnsError404NotFoundResponse(String.format("A apresentação para votação de ID %d não foi encontrada.", idPresentationVote), null, !IS_PRESENTATION_RESPONSE);
+
+            log.info("PresentationService :: Presentation de votacao encontrada!");
+            PresentationVote presentationVoteToBeDeleted = presentationVote.get();
+            log.info("PresentationService :: Desativando presentation...");
+            presentationVoteToBeDeleted.setStatus(Status.INACTIVE);
+            voteRepository.save(presentationVoteToBeDeleted);
+            log.info("PresentationService :: Presentation desativada com sucesso!");
+            return new PresentationVoteResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativada com sucesso!", "");
+        } catch (Exception e) {
+            return returnsError500InternalServerErrorResponse(e, !IS_PRESENTATION_RESPONSE);
         }
     }
 
     /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
-    private PresentationResponse returnsError404NotFoundResponse(String message, Object aFalse) {
-        log.info("Não foi possivel encontrar nenhuma apresentacao!");
-        return new PresentationResponse(
-                HttpStatus.NOT_FOUND.value(),
-                message,
-                Objects.nonNull(aFalse) ? aFalse : null);
+    private <T> T returnsError404NotFoundResponse(String message, Object responseBody, boolean isPresentationResponse) {
+        log.info("PresentationService :: Não foi possivel encontrar nenhuma apresentacao!");
+        int code = HttpStatus.NOT_FOUND.value();
+
+        if(isPresentationResponse) return (T) new PresentationResponse(code, message, responseBody);
+        else return (T) new PresentationVoteResponse(code, message, responseBody);
     }
 
-    private PresentationResponse returnsError500InternalServerErrorResponse(Exception error) {
+    private <T> T returnsError500InternalServerErrorResponse(Exception error, boolean isPresentationResponse) {
         log.error(error.getLocalizedMessage());
-        return new PresentationResponse(
-                HttpStatus.INTERNAL_SERVER_ERROR.value(),
-                "Ocorreu um erro desconhecido!",
-                error);
+        int code = HttpStatus.INTERNAL_SERVER_ERROR.value();
+        String messageError = "Ocorreu um erro desconhecido!";
+
+        if(isPresentationResponse) return (T) new PresentationResponse(code, messageError, error);
+        else return (T) new PresentationVoteResponse(code, messageError, error);
     }
 
-    private PresentationResponse returnsError400BadRequestResponse(String message) {
+    private <T> T  returnsError400BadRequestResponse(String message, boolean isPresentationResponse) {
         log.info(message);
-        return new PresentationResponse(
-                HttpStatus.BAD_REQUEST.value(),
-                message,
-                null);
+        int code = HttpStatus.BAD_REQUEST.value();
+
+        if(isPresentationResponse) return (T) new PresentationResponse(code, message, null);
+        else return (T) new PresentationVoteResponse(code, message, null);
     }
 }
