@@ -1,60 +1,84 @@
-INSERT INTO music (name, status, style) VALUES
-('NOME_MUSICA_1', 'ACTIVE', 'BREGA'),
-('NOME_MUSICA_2', 'ACTIVE', 'MELODY'),
-('NOME_MUSICA_3', 'ACTIVE', 'PAGODE'),
-('NOME_MUSICA_4', 'ACTIVE', 'SERTANEJO'),
-('NOME_MUSICA_5', 'INACTIVE', 'BREGA');
+-- Insert na tabela music
+INSERT INTO music (name, status, style)
+VALUES
+  ('NOME_MUSICA_1', 'ACTIVE', 'BREGA'),
+  ('NOME_MUSICA_2', 'ACTIVE', 'MELODY'),
+  ('NOME_MUSICA_3', 'ACTIVE', 'PAGODE'),
+  ('NOME_MUSICA_4', 'ACTIVE', 'SERTANEJO'),
+  ('NOME_MUSICA_5', 'INACTIVE', 'BREGA');
 
-INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_1', 'IMAGE', CURRENT_DATE);
-INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_2', 'IMAGE', CURRENT_DATE);
-INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_3', 'IMAGE', CURRENT_DATE);
-INSERT INTO media (s3_key, type, upload_date) VALUES ('S3_KEY_4', 'IMAGE', CURRENT_DATE);
-INSERT INTO media (s3_key, type, upload_date) VALUES ('BANDA_S3_KEY_PHOTOGRAPH', 'IMAGE', CURRENT_DATE);
-INSERT INTO media (s3_key, type, upload_date) VALUES ('APRESENTACAO_S3_KEY_PHOTOGRAPH', 'IMAGE', CURRENT_DATE);
+-- Insert na tabela media
+INSERT INTO media (s3_key, type, upload_date)
+VALUES
+  ('S3_KEY_1', 'IMAGE', CURRENT_DATE),
+  ('S3_KEY_2', 'IMAGE', CURRENT_DATE),
+  ('S3_KEY_3', 'IMAGE', CURRENT_DATE),
+  ('S3_KEY_4', 'IMAGE', CURRENT_DATE),
+  ('BANDA_S3_KEY_PHOTOGRAPH', 'IMAGE', CURRENT_DATE),
+  ('APRESENTACAO_S3_KEY_PHOTOGRAPH', 'IMAGE', CURRENT_DATE);
 
+-- Insert na tabela validation_email
 INSERT INTO validation_email (email, verification_code, is_confirmed)
 VALUES
-    ('EMAIL_ADMIN_1@example.com', 111111, true),
-	('EMAIL_SINGER_1@example.com', 22222, true),
-    ('EMAIL_USUARIO_1@example.com', 333333, false),
-    ('EMAIL_USUARIO_2@example.com', 444444, false);
+  ('EMAIL_ADMIN_1@example.com', 111111, true),
+  ('EMAIL_SINGER_1@example.com', 22222, true),
+  ('EMAIL_USUARIO_1@example.com', 333333, false),
+  ('EMAIL_USUARIO_2@example.com', 444444, false);
 
-INSERT INTO role (name) VALUES ('ROLE_ADMIN'), ('ROLE_USER'), ('ROLE_SINGER');
+-- Insert na tabela role
+INSERT INTO role (name)
+VALUES ('ROLE_ADMIN'), ('ROLE_USER'), ('ROLE_SINGER');
 
-INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_1', 'PASSWORD_ADMIN_1', 1, CURRENT_DATE, 1, 'ACTIVE');
-INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_2', 'PASSWORD_USER_1', 3, CURRENT_DATE, 2, 'ACTIVE');
-INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_3', 'PASSWORD_SINGER_1', 2, CURRENT_DATE, 3, 'ACTIVE');
-INSERT INTO "user" (username, password, email_id, create_date, media_id, status) VALUES ('USER_4', 'PASSWORD_USER_2', 4, CURRENT_DATE, 4, 'INACTIVE');
+-- Insert na tabela user
+INSERT INTO "user" (username, password, email_id, create_date, media_id, status)
+VALUES
+  ('USER_1', 'PASSWORD_ADMIN_1', 1, CURRENT_DATE, 1, 'ACTIVE'),
+  ('USER_2', 'PASSWORD_USER_1', 3, CURRENT_DATE, 2, 'ACTIVE'),
+  ('USER_3', 'PASSWORD_SINGER_1', 2, CURRENT_DATE, 3, 'ACTIVE'),
+  ('USER_4', 'PASSWORD_USER_2', 4, CURRENT_DATE, 4, 'INACTIVE');
 
-INSERT INTO user_role (user_id, role_id) VALUES
-(1, 1),
-(1, 2),
-(2, 2),
-(3, 2),
-(3, 3),
-(4, 2);
+-- Insert na tabela user_role
+INSERT INTO user_role (user_id, role_id)
+VALUES
+  (1, 1),
+  (1, 2),
+  (2, 2),
+  (3, 2),
+  (3, 3),
+  (4, 2);
 
+-- Insert na tabela band
 INSERT INTO band (name, media_id, status, total_payment, description, create_date)
-VALUES ('BANDA_1', 5, 'ACTIVE', 1000,  'BANDA_1_DESCRICAO', CURRENT_DATE);
+VALUES ('BANDA_1', 5, 'ACTIVE', 1000, 'BANDA_1_DESCRICAO', CURRENT_DATE);
 
-INSERT INTO band_singer (band_id, user_id, payment) VALUES (1, 3, 1000);
+-- Insert na tabela band_singer
+INSERT INTO band_singer (band_id, user_id, payment)
+VALUES (1, 3, 1000);
 
-INSERT INTO band_playlist (band_id, music_id) VALUES (1, 2), (1, 1), (1, 5);
+-- Insert na tabela band_playlist
+INSERT INTO band_playlist (band_id, music_id)
+VALUES (1, 2), (1, 1), (1, 5);
 
-INSERT INTO user_preference (user_id, band_id) VALUES (1, 1);
+-- Insert na tabela user_preference
+INSERT INTO user_preference (user_id, band_id)
+VALUES (1, 1);
 
+-- Insert na tabela presentation
 INSERT INTO presentation (status, band_id, media_id, start_presentation, end_presentation, description)
 VALUES ('ACTIVE', 1, 6, CURRENT_TIME, CURRENT_TIME, 'PRESENTATION_1_DESCRICAO');
 
-INSERT INTO show (date, status, budget) VALUES (CURRENT_DATE, 'ACTIVE', 1000.0);
+-- Insert na tabela show
+INSERT INTO show (date, status, budget)
+VALUES (CURRENT_DATE, 'ACTIVE', 1000.0);
 
-INSERT INTO show_presentation (show_id, presentation_id) VALUES (1, 1);
-
-INSERT INTO show_vote (total_votes, start_voting, end_voting, status) VALUES
-(0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE');
-
-INSERT INTO show_vote_presentation_vote (show_vote_id, presentation_vote_id)
+-- Insert na tabela show_presentation
+INSERT INTO show_presentation (show_id, presentation_id)
 VALUES (1, 1);
 
-INSERT INTO presentation_vote (presentation_id, votes, status)
-VALUES (1, 0, 'ACTIVE');
+-- Insert na tabela show_vote
+INSERT INTO show_vote (total_votes, start_voting, end_voting, status)
+VALUES (0, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP, 'ACTIVE');
+
+-- Insert na tabela show_vote_presentation_vote
+INSERT INTO show_vote_presentation_vote (show_vote_id, presentation_vote_id)
+VALUES (1, 1);
