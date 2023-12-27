@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.application.services.show.band.bandMember;
+package br.com.paramazon.demo.application.services.show.band;
 
 import br.com.paramazon.demo.domain.repository.show.band.BandSingerRepository;
 import lombok.RequiredArgsConstructor;

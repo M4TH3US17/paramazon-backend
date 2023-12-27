@@ -3,6 +3,7 @@ package br.com.paramazon.demo.domain.model.show.showVote;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
 import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 

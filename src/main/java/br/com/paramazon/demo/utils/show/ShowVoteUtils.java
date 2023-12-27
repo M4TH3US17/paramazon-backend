@@ -1,8 +1,8 @@
-package br.com.paramazon.demo.utils.show.showVote;
+package br.com.paramazon.demo.utils.show;
 
 import br.com.paramazon.demo.application.dto.show.ShowVoteDTO;
 import br.com.paramazon.demo.domain.model.show.showVote.ShowVote;
-import br.com.paramazon.demo.utils.show.showVote.presentationVote.PresentationVoteUtils;
+import br.com.paramazon.demo.utils.show.presentation.PresentationVoteUtils;
 import lombok.*;
 
 import java.util.List;
@@ -30,7 +30,6 @@ public class ShowVoteUtils {
      * @return Um ShowVoteDTO.
      */
     public static ShowVoteDTO convertToDTO(ShowVote data) {
-        System.out.println(data.getPresentationVotes());
         return new ShowVoteDTO(
                 data.getIdShowVote(),
                 data.getStartVoting(),

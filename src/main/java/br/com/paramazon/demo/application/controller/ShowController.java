@@ -64,7 +64,7 @@ public class ShowController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/show-votes/", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/votes/", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Recupera todos os shows cadastradas no sistema", response = ShowVoteResponse.class, httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna uma lista de Show Votes conforme o padrão do Objeto abaixo", response = ShowVoteDTO.class),
@@ -77,7 +77,7 @@ public class ShowController {
     }
 
     @SneakyThrows
-    @GetMapping(value = "/show-votes/{idShowVote}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @GetMapping(value = "/votes/{idShowVote}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Recupera um show vote atraves do id", response = ShowVoteResponse.class, httpMethod = "GET")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna ShowVote da base conforme o padrão do Objeto abaixo", response = ShowVoteResponse.class),
@@ -90,7 +90,7 @@ public class ShowController {
     }
 
     @SneakyThrows
-    @DeleteMapping(value = "/show-votes/delete/{idShowVote}", produces = MediaType.APPLICATION_JSON_VALUE)
+    @DeleteMapping(value = "/votes/delete/{idShowVote}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta/desativa Show Vote cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
     @ApiResponses(value = {
             @ApiResponse(code = 204, message = "Retorna caso a Show Vote tenha sido desativado com sucesso!", response = ShowVoteResponse.class),

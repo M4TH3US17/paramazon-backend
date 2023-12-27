@@ -8,7 +8,7 @@ import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.Pr
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
-import br.com.paramazon.demo.utils.show.showVote.presentationVote.PresentationVoteUtils;
+import br.com.paramazon.demo.utils.show.presentation.PresentationVoteUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;

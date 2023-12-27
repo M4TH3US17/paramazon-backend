@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.utils.show.showVote.presentationVote;
+package br.com.paramazon.demo.utils.show.presentation;
 
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationDTO;
@@ -21,7 +21,7 @@ public class PresentationVoteUtils {
      * @return Um conjunto de PresentationVoteDTO.
      */
     public static List<PresentationVoteDTO> buildBasePresentationVoteList(List<PresentationVote> presentationVotes) {
-        return  presentationVotes.stream()
+        return presentationVotes.stream()
                 .map(presentation -> convertToDTO(presentation))
                 .collect(Collectors.toList());
     }

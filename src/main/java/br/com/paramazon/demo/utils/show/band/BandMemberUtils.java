@@ -1,4 +1,4 @@
-package br.com.paramazon.demo.utils.show.band.bandMember;
+package br.com.paramazon.demo.utils.show.band;
 
 import br.com.paramazon.demo.application.dto.show.band.BandMemberDTO;
 import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
