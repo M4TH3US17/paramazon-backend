@@ -3,7 +3,6 @@ package br.com.paramazon.demo.application.controller;
 import br.com.paramazon.demo.application.dto.show.ShowDTO;
 import br.com.paramazon.demo.application.services.show.ShowService;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
-import br.com.paramazon.demo.infrastructure.response.shows.band.BandResponse;
 import io.swagger.annotations.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;

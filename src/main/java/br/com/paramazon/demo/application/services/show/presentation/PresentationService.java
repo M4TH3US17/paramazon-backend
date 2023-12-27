@@ -3,7 +3,6 @@ package br.com.paramazon.demo.application.services.show.presentation;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
-import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
 import lombok.RequiredArgsConstructor;
