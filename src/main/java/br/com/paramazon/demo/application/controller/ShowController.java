@@ -3,7 +3,6 @@ package br.com.paramazon.demo.application.controller;
 import br.com.paramazon.demo.application.dto.show.ShowDTO;
 import br.com.paramazon.demo.application.dto.show.ShowVoteDTO;
 import br.com.paramazon.demo.application.services.show.ShowService;
-import br.com.paramazon.demo.application.services.show.showVote.ShowVoteService;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.ShowVoteResponse;
 import io.swagger.annotations.*;
@@ -23,7 +22,6 @@ import org.springframework.web.bind.annotation.*;
 public class ShowController {
 
     private final ShowService service;
-    private final ShowVoteService voteService;
 
     @SneakyThrows
     @GetMapping(value = "/", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -74,7 +72,7 @@ public class ShowController {
     })
     public ResponseEntity<?> obterTodosShowVotes() {
         log.info("ShowController :: Iniciando o processo de obtenção de todas votacoes cadastradas no sistema!");
-        var response = voteService.getAllShowVotes();
+        var response = service.getAllShowVotes();
         return ResponseEntity.status(response.code()).body(response);
     }
 
@@ -87,7 +85,7 @@ public class ShowController {
     })
     public ResponseEntity<?> obterShowVotePorId(@PathVariable(name = "idShowVote") Long idShowVote) {
         log.info("ShowController :: Iniciando o processo de obtenção de Show Vote de ID = {}", idShowVote);
-        var response = voteService.getShowVoteById(idShowVote);
+        var response = service.getShowVoteById(idShowVote);
         return ResponseEntity.status(response.code()).body(response);
     }
 
@@ -101,7 +99,7 @@ public class ShowController {
     })
     public ResponseEntity<?> desativarShowVote(@PathVariable(name = "idShowVote") Long idShowVote) {
         log.info("ShowController :: Iniciando o processo de desativação da Show Vote de idShowVote {}", idShowVote);
-        var response = voteService.disableShowVote(idShowVote);
+        var response = service.disableShowVote(idShowVote);
         return ResponseEntity.status(response.code()).body(response);
     }
 }
