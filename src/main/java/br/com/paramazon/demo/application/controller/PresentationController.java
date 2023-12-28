@@ -3,6 +3,8 @@ package br.com.paramazon.demo.application.controller;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationDTO;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationVoteDTO;
 import br.com.paramazon.demo.application.services.show.presentation.PresentationService;
+import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
@@ -49,6 +51,21 @@ public class PresentationController {
         var response = service.getPresentationById(idPresentation);
         return ResponseEntity.status(response.code()).body(response);
     }
+
+    @SneakyThrows
+    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Solicita o cadastro de uma Presentation no sistema", response = PresentationResponse.class, httpMethod = "POST", code = 201)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a presentation caso ja tenha sido cadastrado na base de dados, conforme padrão abaixo", response = PresentationDTO.class),
+            @ApiResponse(code = 201, message = "Retorna a presentation cadastrada na base de dados, conforme padrão abaixo", response = PresentationDTO.class),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> createPresentation(@RequestBody RegisterPresentationRequest request) {
+        log.info("PresentationController :: Iniciando o processo de persistencia de uma nova apresentacao...");
+        var response = service.createPresentation(request);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
 
     @SneakyThrows
     @DeleteMapping(value = "/delete/{idPresentation}", produces = MediaType.APPLICATION_JSON_VALUE)

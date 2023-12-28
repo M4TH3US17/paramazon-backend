@@ -2,8 +2,10 @@ package br.com.paramazon.demo.utils.media;
 
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import br.com.paramazon.demo.domain.model.media.Media;
+import br.com.paramazon.demo.infrastructure.request.medias.RegisterMediaRequest;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -33,5 +35,18 @@ public class MediaUtils {
                 data.getIdMedia(),
                 data.getS3Key()
         );
+    }
+
+    /**
+     * Trata os dados da requisição antes de salvar no banco.
+     *
+     * @param request Uma entidade RegisterMediaRequest.
+     * @return Uma entidade Media.
+     */
+    public static Media makeMediaToPersist(RegisterMediaRequest request) {
+        return Media.builder()
+                .s3Key(request.s3Key())
+                .type(request.type())
+                .build();
     }
 }

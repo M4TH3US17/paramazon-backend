@@ -1,5 +1,6 @@
 package br.com.paramazon.demo.domain.model.show.presentation;
 
+import br.com.paramazon.demo.domain.enums.MediaType;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.media.Media;
@@ -30,7 +31,7 @@ public class Presentation implements Serializable {
     @JoinColumn(name = "band_id", nullable = false)
     private Band band;
 
-    @OneToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
     @JoinColumn(name = "media_id")
     private Media photograph;
 
@@ -42,5 +43,10 @@ public class Presentation implements Serializable {
 
     @Column
     private String description;
+
+    @PrePersist
+    private void prePersist() {
+        this.status = Status.ACTIVE;
+    }
 
 }

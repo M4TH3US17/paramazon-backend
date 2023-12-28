@@ -1,10 +1,13 @@
 package br.com.paramazon.demo.application.services.show.presentation;
 
 import br.com.paramazon.demo.domain.enums.Status;
+import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
+import br.com.paramazon.demo.domain.repository.show.band.BandRepository;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
 import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.PresentationVoteRepository;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
@@ -23,6 +26,8 @@ public class PresentationService {
 
     private final PresentationRepository repository;
     private final PresentationVoteRepository voteRepository;
+
+    private final BandRepository bandRepository;
 
     private final static boolean IS_PRESENTATION_RESPONSE = true;
 
@@ -51,6 +56,30 @@ public class PresentationService {
         }
 
         return returnsError404NotFoundResponse(String.format("Não foi encontrado nenhuma apresentacao de ID %d na base", idPresentation), null, IS_PRESENTATION_RESPONSE);
+    }
+
+    public PresentationResponse createPresentation(RegisterPresentationRequest request) {
+        log.info("PresentationService :: Iniciando etapa de persistencia de uma nova apresentacao...");
+        try {
+            log.info("PresentationService :: Localizando na base Banda de ID {}...", request.idBand());
+            Band presentationBand = bandRepository.findByIdBandAndStatus(request.idBand(), Status.ACTIVE).orElse(null);
+
+            if(Objects.isNull(presentationBand)) {
+                log.warn("PresentationService :: Banda de ID {} não encontrada!", request.idBand());
+                return returnsError404NotFoundResponse(String.format("Banda ID %d não encontrada!", request.idBand()), null, IS_PRESENTATION_RESPONSE);
+            }
+
+            Presentation presentation = PresentationUtils.makePresentationToPersist(request, presentationBand/*, s3Service*/);
+            log.info("PresentationService :: Salvando apresentacao...");
+            Presentation savedPresentation = repository.save(presentation);
+            return new PresentationResponse(
+                    HttpStatus.CREATED.value(),
+                    "Apresentação cadastrada com sucesso!",
+                    PresentationUtils.convertToDTO(savedPresentation));
+
+        } catch (Exception e) {
+            return returnsError500InternalServerErrorResponse(e, IS_PRESENTATION_RESPONSE);
+        }
     }
 
     public PresentationResponse disablePresentation(Long idPresentation) {
@@ -124,7 +153,7 @@ public class PresentationService {
 
     /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
     private <T> T returnsError404NotFoundResponse(String message, Object responseBody, boolean isPresentationResponse) {
-        log.info("PresentationService :: Não foi possivel encontrar nenhuma apresentacao!");
+        log.error("PresentationService :: Erro 404 (Not Found)!");
         int code = HttpStatus.NOT_FOUND.value();
 
         if(isPresentationResponse) return (T) new PresentationResponse(code, message, responseBody);
@@ -147,4 +176,5 @@ public class PresentationService {
         if(isPresentationResponse) return (T) new PresentationResponse(code, message, null);
         else return (T) new PresentationVoteResponse(code, message, null);
     }
+
 }

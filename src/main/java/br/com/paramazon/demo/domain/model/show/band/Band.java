@@ -20,7 +20,7 @@ import java.util.*;
 public class Band implements Serializable {
 
     @Id
-    @Column(name = "id", nullable = false)
+    @Column(name = "id")
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long idBand;
 
@@ -55,17 +55,16 @@ public class Band implements Serializable {
 
     @PrePersist
     private void prePersist() {
+        this.status = Status.ACTIVE;
         this.createDate = LocalDate.now();
+        this.totalPayment = calculateBandValue();
     }
 
-    public void addBandSinger(BandMember bandSinger) {
-        bandMembers.add(bandSinger);
-        bandSinger.setBand(this);
-    }
+    private Double calculateBandValue() {
+        boolean noMembersInBand = (Objects.isNull(bandMembers) || bandMembers.isEmpty());
+        if(Objects.isNull(this.totalPayment) && noMembersInBand) return 0.0;
 
-    public void removeBandSinger(BandMember bandSinger) {
-        bandMembers.remove(bandSinger);
-        bandSinger.setBand(null);
+        return bandMembers.stream().mapToDouble(BandMember::getPayment).sum();
     }
 
 }

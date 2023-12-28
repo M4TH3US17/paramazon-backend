@@ -1,7 +1,9 @@
 package br.com.paramazon.demo.utils.show.band;
 
 import br.com.paramazon.demo.application.dto.show.band.BandDTO;
+import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.band.Band;
+import br.com.paramazon.demo.infrastructure.request.shows.band.RegisterBandRequest;
 import br.com.paramazon.demo.utils.media.MediaUtils;
 import br.com.paramazon.demo.utils.music.MusicUtils;
 import lombok.*;
@@ -32,8 +34,6 @@ public class BandUtils {
      * @return Um BandDTO.
      */
     public static BandDTO convertToDTO(Band data) {
-        //Set<BandSinger> members = data.getBandSingers().stream().map(BandSinger::getUser).collect(Collectors.toSet());
-
         return new BandDTO(
                 data.getIdBand(),
                 data.getName(),
@@ -43,5 +43,20 @@ public class BandUtils {
                 MusicUtils.buildBaseMusicList(data.getPlaylist()),
                 BandMemberUtils.buildBaseParticipantsList(new ArrayList<>(data.getBandMembers()))
         );
+    }
+
+    /**
+     * Trata os dados da requisição antes de salvar no banco.
+     *
+     * @param request Uma entidade RegisterBandRequest.
+     * @return Uma entidade Band.
+     */
+    public static Band makeBandToPersist(RegisterBandRequest request) {
+        return Band.builder()
+                .idBand(request.idBand())
+                .name(request.name())
+                .description(request.description())
+                .photograph(MediaUtils.makeMediaToPersist(request.photograph()))
+                .build();
     }
 }
