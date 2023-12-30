@@ -3,12 +3,15 @@ package br.com.paramazon.demo.utils.show.presentation;
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationDTO;
 import br.com.paramazon.demo.application.dto.show.presentation.PresentationVoteDTO;
+import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.media.Media;
+import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
 import lombok.*;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -37,5 +40,15 @@ public class PresentationVoteUtils {
                 data.getIdPresentationVote(),
                 PresentationUtils.convertToDTO(data.getVotingPresentation()),
                 data.getVotes());
+    }
+
+    public static PresentationVote makePresentationVoteToPersist(Presentation presentation) {
+        if(Objects.isNull(presentation)) return null;
+
+        return PresentationVote.builder()
+                .votes(0)
+                .status(Status.ACTIVE)
+                .votingPresentation(presentation)
+                .build();
     }
 }

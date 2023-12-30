@@ -5,6 +5,7 @@ import br.com.paramazon.demo.application.dto.show.presentation.PresentationVoteD
 import br.com.paramazon.demo.application.services.show.presentation.PresentationService;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationVoteRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
@@ -103,6 +104,20 @@ public class PresentationController {
     public ResponseEntity<?> obterVotacaoDeApresentacaoPorId(@PathVariable(name = "idPresentationVote") Long idPresentationVote) {
         log.info("PresentationController :: Iniciando o processo de obtenção de votacao de apresentacao de idPresentationVote = {}", idPresentationVote);
         var response = service.getPresentationVoteById(idPresentationVote);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
+    @SneakyThrows
+    @PostMapping(value = "/votes/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Solicita o cadastro de uma Presentation vote no sistema", response = PresentationVoteResponse.class, httpMethod = "POST", code = 201)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a presentation vote caso ja tenha sido cadastrada na base de dados, conforme padrão abaixo", response = PresentationVoteDTO.class),
+            @ApiResponse(code = 201, message = "Retorna a presentation vote cadastrada na base de dados, conforme padrão abaixo", response = PresentationVoteDTO.class),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> createPresentationVote(@RequestBody RegisterPresentationVoteRequest request) {
+        log.info("PresentationController :: Iniciando o processo de persistencia de uma nova votacao de apresentacao...");
+        var response = service.createPresentationVote(request);
         return ResponseEntity.status(response.code()).body(response);
     }
 

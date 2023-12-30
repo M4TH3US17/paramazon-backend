@@ -8,6 +8,7 @@ import br.com.paramazon.demo.domain.repository.show.band.BandRepository;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
 import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.PresentationVoteRepository;
 import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationVoteRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
@@ -132,24 +133,43 @@ public class PresentationService {
         return returnsError404NotFoundResponse(String.format("Não foi encontrada nenhuma apresentação para votação com o ID %d na base de dados.", idPresentationVote), null, !IS_PRESENTATION_RESPONSE);
     }
 
-    public PresentationVoteResponse disablePresentationVote(Long idPresentationVote) {
-        log.info("PresentationService :: Iniciando etapa de desativação de presentation. (votacao)");
-        Optional<PresentationVote> presentationVote = voteRepository.findByIdPresentationVoteAndStatus(idPresentationVote, Status.ACTIVE);
+    public PresentationVoteResponse createPresentationVote(RegisterPresentationVoteRequest request) {
+        log.info("PresentationService :: Iniciando etapa de persistencia de uma nova apresentacao para votacao...");
         try {
-            if (presentationVote.isEmpty())
-                return returnsError404NotFoundResponse(String.format("A apresentação para votação de ID %d não foi encontrada.", idPresentationVote), null, !IS_PRESENTATION_RESPONSE);
+            log.info("PresentationService :: Buscando na base Presentation de ID {}...", request.idPresentation());
+            Presentation presentation = repository.findByIdPresentationAndStatus(request.idPresentation(), Status.ACTIVE).orElse(null);
 
-            log.info("PresentationService :: Presentation de votacao encontrada!");
-            PresentationVote presentationVoteToBeDeleted = presentationVote.get();
-            log.info("PresentationService :: Desativando presentation...");
-            presentationVoteToBeDeleted.setStatus(Status.INACTIVE);
-            voteRepository.save(presentationVoteToBeDeleted);
-            log.info("PresentationService :: Presentation desativada com sucesso!");
-            return new PresentationVoteResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativada com sucesso!", "");
+            if(Objects.isNull(presentation))
+                return returnsError404NotFoundResponse("A apresentação de ID "+ request.idPresentation() +" não foi localizada.", null, !IS_PRESENTATION_RESPONSE);
+
+            log.info("PresentationService :: Salvando apresentacao para ser votada...");
+            PresentationVote savedVotePresentation = voteRepository.save(PresentationVoteUtils.makePresentationVoteToPersist(presentation));
+
+            return new PresentationVoteResponse( HttpStatus.CREATED.value(), "Apresentação cadastrada com sucesso!", PresentationVoteUtils.convertToDTO(savedVotePresentation));
+
         } catch (Exception e) {
             return returnsError500InternalServerErrorResponse(e, !IS_PRESENTATION_RESPONSE);
         }
     }
+
+    public PresentationVoteResponse disablePresentationVote (Long idPresentationVote){
+                log.info("PresentationService :: Iniciando etapa de desativação de presentation. (votacao)");
+                Optional<PresentationVote> presentationVote = voteRepository.findByIdPresentationVoteAndStatus(idPresentationVote, Status.ACTIVE);
+                try {
+                    if (presentationVote.isEmpty())
+                        return returnsError404NotFoundResponse(String.format("A apresentação para votação de ID %d não foi encontrada.", idPresentationVote), null, !IS_PRESENTATION_RESPONSE);
+
+                    log.info("PresentationService :: Presentation de votacao encontrada!");
+                    PresentationVote presentationVoteToBeDeleted = presentationVote.get();
+                    log.info("PresentationService :: Desativando presentation...");
+                    presentationVoteToBeDeleted.setStatus(Status.INACTIVE);
+                    voteRepository.save(presentationVoteToBeDeleted);
+                    log.info("PresentationService :: Presentation desativada com sucesso!");
+                    return new PresentationVoteResponse(HttpStatus.NO_CONTENT.value(), "Presentation desativada com sucesso!", "");
+                } catch (Exception e) {
+                    return returnsError500InternalServerErrorResponse(e, !IS_PRESENTATION_RESPONSE);
+                }
+            }
 
     /* METODOS PRIVADOS PARA AUXILIAR A CLASSE DE SERVICO */
     private <T> T returnsError404NotFoundResponse(String message, Object responseBody, boolean isPresentationResponse) {
