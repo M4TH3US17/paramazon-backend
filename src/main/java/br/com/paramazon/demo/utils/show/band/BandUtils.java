@@ -1,13 +1,17 @@
 package br.com.paramazon.demo.utils.show.band;
 
+import br.com.paramazon.demo.application.dto.media.MediaDTO;
 import br.com.paramazon.demo.application.dto.show.band.BandDTO;
 import br.com.paramazon.demo.domain.enums.Status;
+import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.show.band.Band;
+import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
 import br.com.paramazon.demo.infrastructure.request.shows.band.RegisterBandRequest;
 import br.com.paramazon.demo.utils.media.MediaUtils;
 import br.com.paramazon.demo.utils.music.MusicUtils;
 import lombok.*;
 
+import java.time.LocalDate;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -41,8 +45,7 @@ public class BandUtils {
                 data.getTotalPayment(),
                 data.getDescription(),
                 MusicUtils.buildBaseMusicList(data.getPlaylist()),
-                BandMemberUtils.buildBaseParticipantsList(new ArrayList<>(data.getBandMembers()))
-        );
+                BandMemberUtils.buildBaseParticipantsList(new ArrayList<>(data.getBandMembers())));
     }
 
     /**
@@ -52,11 +55,22 @@ public class BandUtils {
      * @return Uma entidade Band.
      */
     public static Band makeBandToPersist(RegisterBandRequest request) {
+        Media photograph = Objects.nonNull(request.photograph()) ? MediaUtils.makeMediaToPersist(request.photograph()) : null;
+
         return Band.builder()
                 .idBand(request.idBand())
                 .name(request.name())
                 .description(request.description())
-                .photograph(MediaUtils.makeMediaToPersist(request.photograph()))
+                .photograph(photograph)
+                .status(Status.ACTIVE)
+                .createDate(LocalDate.now())
                 .build();
+    }
+
+    public static Double calculateBandValue(Set<BandMember> bandMembers) {
+        boolean noMembersInBand = (Objects.isNull(bandMembers) || bandMembers.isEmpty());
+        if(noMembersInBand) return 0.0;
+
+        return bandMembers.stream().mapToDouble(BandMember::getPayment).sum();
     }
 }

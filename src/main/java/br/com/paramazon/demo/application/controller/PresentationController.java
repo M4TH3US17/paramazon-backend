@@ -53,7 +53,7 @@ public class PresentationController {
     }
 
     @SneakyThrows
-    @PostMapping(value = "/save", produces = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Solicita o cadastro de uma Presentation no sistema", response = PresentationResponse.class, httpMethod = "POST", code = 201)
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Retorna a presentation caso ja tenha sido cadastrado na base de dados, conforme padrão abaixo", response = PresentationDTO.class),
@@ -65,7 +65,6 @@ public class PresentationController {
         var response = service.createPresentation(request);
         return ResponseEntity.status(response.code()).body(response);
     }
-
 
     @SneakyThrows
     @DeleteMapping(value = "/delete/{idPresentation}", produces = MediaType.APPLICATION_JSON_VALUE)

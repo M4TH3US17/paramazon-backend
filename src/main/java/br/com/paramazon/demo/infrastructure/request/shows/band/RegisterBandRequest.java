@@ -4,6 +4,9 @@ import br.com.paramazon.demo.infrastructure.request.medias.RegisterMediaRequest;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 
+import java.util.Map;
+import java.util.Set;
+
 @JsonInclude(JsonInclude.Include.NON_NULL)
 @ApiModel(
         discriminator = "Register Band Request",
@@ -13,8 +16,8 @@ public record RegisterBandRequest(
         Long idBand,
         String name,
         RegisterMediaRequest photograph,
-        String description
-        //Set<Music> playlist,
-        //Set<BandMember> bandMembers,
+        String description,
+        Set<Long> musicsId,
+        Set<RegisterBandMemberRequest> bandMembers
 ) {
 }

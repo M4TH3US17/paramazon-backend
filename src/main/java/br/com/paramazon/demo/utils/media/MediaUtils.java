@@ -5,8 +5,7 @@ import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.infrastructure.request.medias.RegisterMediaRequest;
 import lombok.*;
 
-import java.time.LocalDate;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
@@ -20,7 +19,7 @@ public class MediaUtils {
      */
     public static List<MediaDTO> buildBaseMediaList(List<Media> medias) {
         return  medias.stream()
-                .map(band -> convertToDTO(band))
+                .map(media -> convertToDTO(media))
                 .collect(Collectors.toList());
     }
 
@@ -31,6 +30,8 @@ public class MediaUtils {
      * @return Um MediaDTO.
      */
     public static MediaDTO convertToDTO(Media data) {
+        if(Objects.isNull(data)) return null;
+
         return new MediaDTO(
                 data.getIdMedia(),
                 data.getS3Key()

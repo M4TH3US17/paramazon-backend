@@ -2,6 +2,7 @@ package br.com.paramazon.demo.application.controller;
 
 import br.com.paramazon.demo.application.dto.show.band.BandDTO;
 import br.com.paramazon.demo.application.services.show.band.BandService;
+import br.com.paramazon.demo.infrastructure.request.shows.band.RegisterBandRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.band.BandResponse;
 import br.com.paramazon.demo.infrastructure.response.users.UserResponse;
 import io.swagger.annotations.*;
@@ -59,6 +60,20 @@ public class BandController {
     public ResponseEntity<?> desativarBanda(@PathVariable(name = "idBand") Long idBand) {
         log.info("BandController :: Iniciando o processo de desativação da banda de idBand {}", idBand);
         var response = service.disableBand(idBand);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
+    @SneakyThrows
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Solicita o cadastro de uma Band no sistema", response = BandResponse.class, httpMethod = "POST", code = 201)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a banda caso ja tenha sido cadastrada na base de dados, conforme padrão abaixo", response = BandDTO.class),
+            @ApiResponse(code = 201, message = "Retorna a banda cadastrada na base de dados, conforme padrão abaixo", response = BandDTO.class),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> criarBanda(@RequestBody RegisterBandRequest request) {
+        log.info("BandController :: Iniciando o processo de persistencia de uma nova banda...");
+        var response = service.createBand(request);
         return ResponseEntity.status(response.code()).body(response);
     }
 }
