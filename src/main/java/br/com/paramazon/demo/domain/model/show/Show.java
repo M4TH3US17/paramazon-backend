@@ -33,7 +33,7 @@ public class Show implements Serializable {
     @Column(nullable = false)
     private Double budget;
 
-    @ManyToMany(fetch = FetchType.LAZY)
+    @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "show_presentation",
             joinColumns = @JoinColumn(name = "show_id"),
             inverseJoinColumns = @JoinColumn(name = "presentation_id"))

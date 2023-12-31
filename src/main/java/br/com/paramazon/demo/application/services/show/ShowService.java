@@ -2,9 +2,13 @@ package br.com.paramazon.demo.application.services.show;
 
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.Show;
+import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.model.show.showVote.ShowVote;
 import br.com.paramazon.demo.domain.repository.show.ShowRepository;
+import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
 import br.com.paramazon.demo.domain.repository.show.showVote.ShowVoteRepository;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowVoteRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.ShowVoteResponse;
 import br.com.paramazon.demo.utils.show.ShowUtils;
@@ -13,6 +17,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.*;
 
@@ -23,6 +28,7 @@ public class ShowService {
 
     private final ShowRepository repository;
     private final ShowVoteRepository voteRepository;
+    private final PresentationRepository presentationRepository;
 
     private final static boolean IS_SHOW_RESPONSE = true;
 
@@ -48,6 +54,25 @@ public class ShowService {
         }
 
         return returnsError404NotFoundResponse(String.format("Show de ID %d não existe.", idShow), null, IS_SHOW_RESPONSE);
+    }
+
+    public ShowResponse createShow(RegisterShowRequest request) {
+        log.info("ShowService :: Iniciando etapa de persistencia de um novo show...");
+        try {
+            log.info("ShowService :: Buscando apresentacoes na base...");
+            List<Presentation> presentationList = presentationRepository.findAllById(request.idPresentationList());
+
+            log.info("ShowService :: Verificando se ja existe algum Show agendado para {}...", request.date());
+            if(repository.existsShowByDate(request.date()))
+                return new ShowResponse(HttpStatus.CONFLICT.value(), "Já existe um show para a data "+ request.date()+"", null);
+
+            log.info("ShowService :: Salvando Show na base de dados...");
+            Show savedShow = repository.save(ShowUtils.makeShowToPersist(request, presentationList));
+
+            return new ShowResponse(HttpStatus.CREATED.value(), "Show criado com sucesso! (Data: "+ savedShow.getDate() +")", null);
+        } catch(Exception error) {
+            return returnsError500InternalServerErrorResponse(error, IS_SHOW_RESPONSE);
+        }
     }
 
     public ShowResponse disableShow(Long idShow) {
@@ -94,6 +119,17 @@ public class ShowService {
         return returnsError404NotFoundResponse(String.format("Votação de show de ID %d não existe.", idShowVote), null, !IS_SHOW_RESPONSE);
     }
 
+    public ShowVoteResponse createShowVote(RegisterShowVoteRequest request) {
+        log.info("ShowService :: Iniciando etapa de persistencia de um novo show vote...");
+        try {
+
+            return null;
+        } catch(Exception error) {
+            return returnsError500InternalServerErrorResponse(error, !IS_SHOW_RESPONSE);
+        }
+    }
+
+
     public ShowVoteResponse disableShowVote(Long idShowVote) {
         log.info("ShowService :: Iniciando etapa de desativação da votacao");
         Optional<ShowVote> showVote = voteRepository.findByIdShowVoteAndStatus(idShowVote, Status.ACTIVE);
@@ -138,5 +174,4 @@ public class ShowService {
         if(isShowResponse) return (T) new ShowResponse(code, message, null);
         else return (T) new ShowVoteResponse(code, message, null);
     }
-
 }

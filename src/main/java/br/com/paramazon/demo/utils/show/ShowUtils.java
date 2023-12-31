@@ -1,7 +1,12 @@
 package br.com.paramazon.demo.utils.show;
 
 import br.com.paramazon.demo.application.dto.show.ShowDTO;
+import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.Show;
+import br.com.paramazon.demo.domain.model.show.band.Band;
+import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
+import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowRequest;
 import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
 import lombok.*;
 
@@ -38,4 +43,18 @@ public class ShowUtils {
                 PresentationUtils.buildBasePresentationList(data.getPresentations()));
     }
 
+    public static Show makeShowToPersist(RegisterShowRequest request, List<Presentation> presentationList) {
+        return Show.builder()
+                .status(Status.ACTIVE)
+                .budget(calculateShowBudget(presentationList))
+                .presentations(presentationList)
+                .date(request.date())
+                .build();
+    }
+
+    public static Double calculateShowBudget(List<Presentation> presentations) {
+        if((Objects.isNull(presentations) || presentations.isEmpty())) return 0.0;
+
+        return presentations.stream().mapToDouble(presentation -> presentation.getBand().getTotalPayment()).sum();
+    }
 }

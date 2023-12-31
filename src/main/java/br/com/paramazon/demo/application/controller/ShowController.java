@@ -2,9 +2,14 @@ package br.com.paramazon.demo.application.controller;
 
 import br.com.paramazon.demo.application.dto.show.ShowDTO;
 import br.com.paramazon.demo.application.dto.show.ShowVoteDTO;
+import br.com.paramazon.demo.application.dto.show.presentation.PresentationVoteDTO;
 import br.com.paramazon.demo.application.services.show.ShowService;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowVoteRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationVoteRequest;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.ShowVoteResponse;
+import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
 import io.swagger.annotations.*;
 import lombok.*;
 import lombok.extern.slf4j.Slf4j;
@@ -50,6 +55,20 @@ public class ShowController {
     }
 
     @SneakyThrows
+    @PostMapping(value = "/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Solicita o cadastro de uma Show no sistema", response = ShowResponse.class, httpMethod = "POST", code = 201)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a show caso ja tenha sido cadastrada na base de dados, conforme padrão abaixo", response = ShowDTO.class),
+            @ApiResponse(code = 201, message = "Retorna a show cadastrada na base de dados, conforme padrão abaixo", response = ShowDTO.class),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> createShow(@RequestBody RegisterShowRequest request) {
+        log.info("ShowController :: Iniciando o processo de persistencia de um novo show...");
+        var response = service.createShow(request);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
+    @SneakyThrows
     @DeleteMapping(value = "/delete/{idShow}", produces = MediaType.APPLICATION_JSON_VALUE)
     @ApiOperation(value = "Deleta/desativa banda cadastrada."/*, response = LoginResponse.class*/, httpMethod = "DELETE", code = 204)
     @ApiResponses(value = {
@@ -86,6 +105,20 @@ public class ShowController {
     public ResponseEntity<?> obterShowVotePorId(@PathVariable(name = "idShowVote") Long idShowVote) {
         log.info("ShowController :: Iniciando o processo de obtenção de Show Vote de ID = {}", idShowVote);
         var response = service.getShowVoteById(idShowVote);
+        return ResponseEntity.status(response.code()).body(response);
+    }
+
+    @SneakyThrows
+    @PostMapping(value = "/votes/save", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    @ApiOperation(value = "Solicita o cadastro de uma Show vote no sistema", response = ShowVoteResponse.class, httpMethod = "POST", code = 201)
+    @ApiResponses(value = {
+            @ApiResponse(code = 200, message = "Retorna a show vote caso ja tenha sido cadastrada na base de dados, conforme padrão abaixo", response = ShowVoteDTO.class),
+            @ApiResponse(code = 201, message = "Retorna a show vote cadastrada na base de dados, conforme padrão abaixo", response = ShowVoteDTO.class),
+            @ApiResponse(code = 500, message = "Retorna uma mensagem de erro algum erro não identificado ocorrer."/*, response = InternalServer500000Response.class*/)
+    })
+    public ResponseEntity<?> createShowVote(@RequestBody RegisterShowVoteRequest request) {
+        log.info("ShowController :: Iniciando o processo de persistencia de uma nova votacao de show...");
+        var response = service.createShowVote(request);
         return ResponseEntity.status(response.code()).body(response);
     }
 
