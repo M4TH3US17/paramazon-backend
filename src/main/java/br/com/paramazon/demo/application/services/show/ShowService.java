@@ -129,11 +129,12 @@ public class ShowService {
     public ShowVoteResponse createShowVote(RegisterShowVoteRequest request) {
         log.info("ShowService :: Iniciando etapa de persistencia de um novo show vote...");
         try {
-            log.info("ShowService :: Verificando se as apresentacoes de ID {} existem na base...", request.idPresentationVoteList());
+            log.info("ShowService :: Buscando as apresentacoes de ID {} na base...", request.idPresentationVoteList());
             List<PresentationVote> presentations = presentationVoteRepository.findAllById(request.idPresentationVoteList());
 
-            if(presentations.isEmpty())
-                return returnsError404NotFoundResponse("Nenhuma votacao em aberto.", null, !IS_SHOW_RESPONSE);
+            log.info("ShowService :: Iniciando processo de validação antes de salvar...");
+            ShowVoteResponse showVoteValidate = validateShowVoteToPersist(request, presentations);
+            if(Objects.nonNull(showVoteValidate)) return showVoteValidate;
 
             log.info("ShowService :: Iniciando processo de salvamento...");
             ShowVote savedVoting = voteRepository.save(ShowVoteUtils.makeShowVoteToPersist(request, presentations));
@@ -187,5 +188,36 @@ public class ShowService {
 
         if(isShowResponse) return (T) new ShowResponse(code, message, null);
         else return (T) new ShowVoteResponse(code, message, null);
+    }
+
+    private ShowVoteResponse validateShowVoteToPersist(RegisterShowVoteRequest validate, List<PresentationVote> presentations) {
+        int codeNotFound = HttpStatus.NOT_FOUND.value();
+        int codeBadRequest = HttpStatus.BAD_REQUEST.value();
+        int codeInternalServerError = HttpStatus.INTERNAL_SERVER_ERROR.value();
+
+        if (presentations.isEmpty()) {
+            log.warn("ShowService :: Nenhuma apresentação encontrada para os IDs de votação: {}.", validate.idPresentationVoteList());
+            return new ShowVoteResponse(codeNotFound, "Nenhuma apresentacao foi configurada para ser votada.", null);
+        }
+
+        if (voteRepository.existsShowVoteByStartVoting(validate.startVoting())) {
+            log.warn("ShowService :: Já existe uma votação cadastrada para a data: {}.", validate.startVoting());
+            return new ShowVoteResponse(codeInternalServerError, "Já existe uma votação para a data " + validate.startVoting(), null);
+        }
+
+        if (validate.startVoting() == null || validate.endVoting() == null) {
+            log.warn("ShowService :: Início ou fim de votação estão nulos!!");
+            if (validate.startVoting() == null)
+                return new ShowVoteResponse(codeBadRequest, "Defina uma data para o início da votação.", null);
+            if (validate.endVoting() == null)
+                return new ShowVoteResponse(codeBadRequest, "Defina uma data para o fim da votação.", null);
+        }
+
+        if (presentations.size() <= 2) {
+            log.warn("ShowService :: Uma votação deve ter ao menos duas apresentações para concorrer!!");
+            return new ShowVoteResponse(codeBadRequest, "Votação deve conter ao menos duas apresentações candidatas.", null);
+        }
+
+        return null;
     }
 }
