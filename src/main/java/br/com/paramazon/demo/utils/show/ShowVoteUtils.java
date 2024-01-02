@@ -1,7 +1,10 @@
 package br.com.paramazon.demo.utils.show;
 
 import br.com.paramazon.demo.application.dto.show.ShowVoteDTO;
+import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.showVote.ShowVote;
+import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
+import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowVoteRequest;
 import br.com.paramazon.demo.utils.show.presentation.PresentationVoteUtils;
 import lombok.*;
 
@@ -39,5 +42,17 @@ public class ShowVoteUtils {
     }
 
 
+    public static ShowVote makeShowVoteToPersist(RegisterShowVoteRequest request, List<PresentationVote> presentations) {
+        return ShowVote.builder()
+                .status(Status.ACTIVE)
+                .presentationVotes(presentations)
+                .endVoting(request.endVoting())
+                .startVoting(request.startVoting())
+                .totalVotes(calculateTotalVotes(presentations))
+                .build();
+    }
 
+    public static int calculateTotalVotes(List<PresentationVote> presentations) {
+        return presentations.stream().mapToInt(PresentationVote::getVotes).sum();
+    }
 }

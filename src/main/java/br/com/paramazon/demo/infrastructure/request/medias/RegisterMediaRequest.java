@@ -1,6 +1,5 @@
 package br.com.paramazon.demo.infrastructure.request.medias;
 
-import br.com.paramazon.demo.domain.enums.MediaType;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import io.swagger.annotations.ApiModel;
 
@@ -12,6 +11,5 @@ import io.swagger.annotations.ApiModel;
         description = "Entidade RegisterMediaRequest para cadastrar arquivos no sistema."
 )
 public record RegisterMediaRequest(
-        String s3Key,
-        MediaType type) {
+        String s3Key) {
 }

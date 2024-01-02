@@ -7,12 +7,10 @@ import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.Present
 import br.com.paramazon.demo.domain.repository.show.band.BandRepository;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
 import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.PresentationVoteRepository;
-import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationRequest;
-import br.com.paramazon.demo.infrastructure.request.shows.presentation.RegisterPresentationVoteRequest;
+import br.com.paramazon.demo.infrastructure.request.shows.presentation.*;
 import br.com.paramazon.demo.infrastructure.response.shows.presentation.PresentationResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.presentationVote.PresentationVoteResponse;
-import br.com.paramazon.demo.utils.show.presentation.PresentationUtils;
-import br.com.paramazon.demo.utils.show.presentation.PresentationVoteUtils;
+import br.com.paramazon.demo.utils.show.presentation.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -73,11 +71,8 @@ public class PresentationService {
             Presentation presentation = PresentationUtils.makePresentationToPersist(request, presentationBand/*, s3Service*/);
             log.info("PresentationService :: Salvando apresentacao...");
             Presentation savedPresentation = repository.save(presentation);
-            return new PresentationResponse(
-                    HttpStatus.CREATED.value(),
-                    "Apresentação cadastrada com sucesso!",
-                    PresentationUtils.convertToDTO(savedPresentation));
 
+            return new PresentationResponse(HttpStatus.CREATED.value(),"Apresentação cadastrada com sucesso!", PresentationUtils.convertToDTO(savedPresentation));
         } catch (Exception e) {
             return returnsError500InternalServerErrorResponse(e, IS_PRESENTATION_RESPONSE);
         }

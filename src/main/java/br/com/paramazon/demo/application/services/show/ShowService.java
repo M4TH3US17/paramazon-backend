@@ -1,24 +1,25 @@
 package br.com.paramazon.demo.application.services.show;
 
+import br.com.paramazon.demo.application.dto.show.ShowVoteDTO;
 import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.show.Show;
 import br.com.paramazon.demo.domain.model.show.presentation.Presentation;
 import br.com.paramazon.demo.domain.model.show.showVote.ShowVote;
+import br.com.paramazon.demo.domain.model.show.showVote.presentationVote.PresentationVote;
 import br.com.paramazon.demo.domain.repository.show.ShowRepository;
 import br.com.paramazon.demo.domain.repository.show.presentation.PresentationRepository;
 import br.com.paramazon.demo.domain.repository.show.showVote.ShowVoteRepository;
-import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowRequest;
-import br.com.paramazon.demo.infrastructure.request.shows.RegisterShowVoteRequest;
+import br.com.paramazon.demo.domain.repository.show.showVote.presentationVote.PresentationVoteRepository;
+import br.com.paramazon.demo.infrastructure.request.shows.*;
 import br.com.paramazon.demo.infrastructure.response.shows.ShowResponse;
 import br.com.paramazon.demo.infrastructure.response.shows.showVote.ShowVoteResponse;
-import br.com.paramazon.demo.utils.show.ShowUtils;
-import br.com.paramazon.demo.utils.show.ShowVoteUtils;
+import br.com.paramazon.demo.utils.show.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
 import java.util.*;
 
 @Slf4j
@@ -28,7 +29,9 @@ public class ShowService {
 
     private final ShowRepository repository;
     private final ShowVoteRepository voteRepository;
+
     private final PresentationRepository presentationRepository;
+    private final PresentationVoteRepository presentationVoteRepository;
 
     private final static boolean IS_SHOW_RESPONSE = true;
 
@@ -65,6 +68,10 @@ public class ShowService {
             log.info("ShowService :: Verificando se ja existe algum Show agendado para {}...", request.date());
             if(repository.existsShowByDate(request.date()))
                 return new ShowResponse(HttpStatus.CONFLICT.value(), "Já existe um show para a data "+ request.date()+"", null);
+
+            log.info("ShowService :: Verificando se a data informada eh valida...", request.date());
+            if(request.date().isBefore(LocalDate.now()))
+                return returnsError400BadRequestResponse("A data informada (" + request.date() + ") não pode ser anterior a " + LocalDate.now(), IS_SHOW_RESPONSE);
 
             log.info("ShowService :: Salvando Show na base de dados...");
             Show savedShow = repository.save(ShowUtils.makeShowToPersist(request, presentationList));
@@ -122,13 +129,20 @@ public class ShowService {
     public ShowVoteResponse createShowVote(RegisterShowVoteRequest request) {
         log.info("ShowService :: Iniciando etapa de persistencia de um novo show vote...");
         try {
+            log.info("ShowService :: Verificando se as apresentacoes de ID {} existem na base...", request.idPresentationVoteList());
+            List<PresentationVote> presentations = presentationVoteRepository.findAllById(request.idPresentationVoteList());
 
-            return null;
+            if(presentations.isEmpty())
+                return returnsError404NotFoundResponse("Nenhuma votacao em aberto.", null, !IS_SHOW_RESPONSE);
+
+            log.info("ShowService :: Iniciando processo de salvamento...");
+            ShowVote savedVoting = voteRepository.save(ShowVoteUtils.makeShowVoteToPersist(request, presentations));
+
+            return new ShowVoteResponse(HttpStatus.CREATED.value(), "Votacao criada com sucesso!", ShowVoteUtils.convertToDTO(savedVoting));
         } catch(Exception error) {
             return returnsError500InternalServerErrorResponse(error, !IS_SHOW_RESPONSE);
         }
     }
-
 
     public ShowVoteResponse disableShowVote(Long idShowVote) {
         log.info("ShowService :: Iniciando etapa de desativação da votacao");

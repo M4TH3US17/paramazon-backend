@@ -1,6 +1,7 @@
 package br.com.paramazon.demo.utils.media;
 
 import br.com.paramazon.demo.application.dto.media.MediaDTO;
+import br.com.paramazon.demo.domain.enums.MediaType;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.infrastructure.request.medias.RegisterMediaRequest;
 import lombok.*;
@@ -47,7 +48,7 @@ public class MediaUtils {
     public static Media makeMediaToPersist(RegisterMediaRequest request) {
         return Media.builder()
                 .s3Key(request.s3Key())
-                .type(request.type())
+                .type(MediaType.IMAGE)
                 .build();
     }
 }
