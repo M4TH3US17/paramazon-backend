@@ -6,6 +6,7 @@ import br.com.paramazon.demo.domain.enums.Status;
 import br.com.paramazon.demo.domain.model.media.Media;
 import br.com.paramazon.demo.domain.model.show.band.Band;
 import br.com.paramazon.demo.domain.model.show.band.bandMember.BandMember;
+import br.com.paramazon.demo.domain.model.user.User;
 import br.com.paramazon.demo.infrastructure.request.shows.band.RegisterBandRequest;
 import br.com.paramazon.demo.utils.media.MediaUtils;
 import br.com.paramazon.demo.utils.music.MusicUtils;
@@ -45,7 +46,8 @@ public class BandUtils {
                 data.getTotalPayment(),
                 data.getDescription(),
                 MusicUtils.buildBaseMusicList(data.getPlaylist()),
-                BandMemberUtils.buildBaseParticipantsList(new ArrayList<>(data.getBandMembers())));
+                BandMemberUtils.buildBaseParticipantsList(new ArrayList<>(data.getBandMembers()))
+        );
     }
 
     /**

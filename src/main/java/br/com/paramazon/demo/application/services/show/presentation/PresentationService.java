@@ -68,6 +68,11 @@ public class PresentationService {
                 return returnsError404NotFoundResponse(String.format("Banda ID %d não encontrada!", request.idBand()), null, IS_PRESENTATION_RESPONSE);
             }
 
+            if(request.endPresentation() == null || request.startPresentation() == null) {
+                log.warn("PresentationService :: startPresentation ou endPresentation esta nulo!");
+                return returnsError400BadRequestResponse("Data de inicio/fim nao pode ser nula!", IS_PRESENTATION_RESPONSE);
+            }
+
             Presentation presentation = PresentationUtils.makePresentationToPersist(request, presentationBand/*, s3Service*/);
             log.info("PresentationService :: Salvando apresentacao...");
             Presentation savedPresentation = repository.save(presentation);

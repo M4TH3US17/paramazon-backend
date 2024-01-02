@@ -85,6 +85,11 @@ public class BandService {
            log.info("BandService :: Iniciando o processo de calcular o custo financeiro da banda...");
            band.setTotalPayment(BandUtils.calculateBandValue(band.getBandMembers()));
 
+           if(members.size() == 1) {
+               String nameMember = new ArrayList<>(members).get(0).getUsername();
+               band.setName(nameMember);
+           }
+
             log.info("BandService :: Salvando Banda na base de dados...");
             Band savedBand = repository.save(band);
             return new BandResponse(HttpStatus.CREATED.value(),  "Banda cadastrada com sucesso!", BandUtils.convertToDTO(savedBand));
